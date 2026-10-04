@@ -64,8 +64,11 @@
 
         if (user) {
 
-            document.getElementById("user").textContent =
-                "سلام " + (user.first_name || "دوست من") + " 👋";
+    document.getElementById("user").innerHTML =
+        "سلام " + (user.first_name || "دوست من") + " 👋<br><br>" +
+        "شناسه شما: " + user.id;
+
+        }
 
         } else {
 
