@@ -36,12 +36,12 @@
 
         .avatar {
             font-size: 60px;
-            margin-bottom: 10px;
         }
 
         #userName {
             font-size: 24px;
             font-weight: bold;
+            margin-top: 10px;
         }
 
         #userId {
@@ -58,6 +58,11 @@
             font-size: 55px;
             font-weight: bold;
             margin: 10px;
+        }
+
+        #level {
+            font-size: 22px;
+            margin-bottom: 25px;
         }
 
         #addButton {
@@ -107,6 +112,10 @@
             0
         </div>
 
+        <div id="level">
+            🥉 مبتدی
+        </div>
+
 
         <button id="addButton">
             ➕ افزایش امتیاز
@@ -147,7 +156,7 @@
     }
 
 
-    // امتیاز
+    // دریافت امتیاز
     let savedScore =
         localStorage.getItem("my_score");
 
@@ -158,11 +167,45 @@
     const scoreElement =
         document.getElementById("score");
 
+    const levelElement =
+        document.getElementById("level");
+
     const button =
         document.getElementById("addButton");
 
 
+    // تعیین سطح
+    function updateLevel() {
+
+        if (score >= 100) {
+
+            levelElement.textContent =
+                "👑 استاد";
+
+        } else if (score >= 50) {
+
+            levelElement.textContent =
+                "🥇 حرفه‌ای";
+
+        } else if (score >= 10) {
+
+            levelElement.textContent =
+                "🥈 متوسط";
+
+        } else {
+
+            levelElement.textContent =
+                "🥉 مبتدی";
+
+        }
+
+    }
+
+
+    // نمایش اولیه
     scoreElement.textContent = score;
+
+    updateLevel();
 
 
     // افزایش امتیاز
@@ -176,6 +219,8 @@
             "my_score",
             score
         );
+
+        updateLevel();
 
     });
 
