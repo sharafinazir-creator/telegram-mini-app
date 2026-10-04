@@ -10,37 +10,69 @@
 
     <title>Mini App من</title>
 
-    <!-- Telegram WebApp -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
 
         body {
+            margin: 0;
+            padding: 25px 15px;
             font-family: Arial, sans-serif;
+            background: #f2f4f7;
             text-align: center;
-            padding: 40px 20px;
         }
 
-        h1 {
-            font-size: 28px;
+        .container {
+            max-width: 400px;
+            margin: auto;
         }
 
-        #user {
-            font-size: 21px;
-            margin: 30px 0;
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .avatar {
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        #userName {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #userId {
+            color: #777;
+            margin-top: 8px;
+        }
+
+        .score-title {
+            margin-top: 30px;
+            font-size: 18px;
         }
 
         #score {
-            font-size: 40px;
-            margin: 30px;
+            font-size: 55px;
+            font-weight: bold;
+            margin: 10px;
         }
 
-        button {
+        #addButton {
+            width: 100%;
+            padding: 17px;
             font-size: 20px;
-            padding: 15px 30px;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
+            background: #2196f3;
+            color: white;
+        }
+
+        #addButton:active {
+            transform: scale(0.95);
         }
 
     </style>
@@ -50,80 +82,104 @@
 
 <body>
 
-    <h1>🎮 Mini App من</h1>
+<div class="container">
 
-    <div id="user">
-        در حال دریافت اطلاعات...
+    <div class="card">
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <div id="userName">
+            در حال دریافت...
+        </div>
+
+        <div id="userId">
+            ...
+        </div>
+
+
+        <div class="score-title">
+            🏆 امتیاز شما
+        </div>
+
+        <div id="score">
+            0
+        </div>
+
+
+        <button id="addButton">
+            ➕ افزایش امتیاز
+        </button>
+
     </div>
 
-    <div id="score">
-        0
-    </div>
-
-    <button id="addButton">
-        ➕ افزایش امتیاز
-    </button>
+</div>
 
 
-    <script>
+<script>
 
-        // Telegram WebApp
-        const tg = window.Telegram.WebApp;
+    const tg = window.Telegram.WebApp;
 
-        // آماده کردن برنامه
-        tg.ready();
+    tg.ready();
 
 
-        // اطلاعات کاربر تلگرام
-        const user = tg.initDataUnsafe.user;
+    // اطلاعات کاربر
+    const user = tg.initDataUnsafe.user;
 
 
-        // نمایش اطلاعات کاربر
-        if (user) {
+    if (user) {
 
-            document.getElementById("user").innerHTML =
-                "سلام " + (user.first_name || "دوست من") +
-                " 👋<br><br>" +
-                "شناسه شما: " + user.id;
+        document.getElementById("userName").textContent =
+            "سلام " + (user.first_name || "دوست من") + " 👋";
 
-        } else {
+        document.getElementById("userId").textContent =
+            "ID: " + user.id;
 
-            document.getElementById("user").innerHTML =
-                "کاربر تلگرام شناسایی نشد ❌";
+    } else {
 
-        }
+        document.getElementById("userName").textContent =
+            "کاربر ناشناس";
 
+        document.getElementById("userId").textContent =
+            "شناسه دریافت نشد";
 
-        // دریافت امتیاز ذخیره شده
-        let savedScore = localStorage.getItem("my_score");
-
-        let score = savedScore ? Number(savedScore) : 0;
+    }
 
 
-        // عناصر صفحه
-        const scoreElement =
-            document.getElementById("score");
+    // امتیاز
+    let savedScore =
+        localStorage.getItem("my_score");
 
-        const button =
-            document.getElementById("addButton");
+    let score =
+        savedScore ? Number(savedScore) : 0;
 
 
-        // نمایش امتیاز
+    const scoreElement =
+        document.getElementById("score");
+
+    const button =
+        document.getElementById("addButton");
+
+
+    scoreElement.textContent = score;
+
+
+    // افزایش امتیاز
+    button.addEventListener("click", function () {
+
+        score++;
+
         scoreElement.textContent = score;
 
+        localStorage.setItem(
+            "my_score",
+            score
+        );
 
-        // افزایش امتیاز
-        button.addEventListener("click", function () {
+    });
 
-            score = score + 1;
-
-            scoreElement.textContent = score;
-
-            localStorage.setItem("my_score", score);
-
-        });
-
-    </script>
+</script>
 
 </body>
 
