@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Mini App من</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
         body {
@@ -14,6 +17,11 @@
 
         h1 {
             font-size: 28px;
+        }
+
+        #user {
+            font-size: 22px;
+            margin: 30px 0;
         }
 
         #score {
@@ -34,7 +42,7 @@
 
     <h1>🎮 Mini App من</h1>
 
-    <p>سلام 👋 خوش آمدی!</p>
+    <p id="user">در حال دریافت اطلاعات...</p>
 
     <div id="score">0</div>
 
@@ -42,9 +50,32 @@
         ➕ افزایش امتیاز
     </button>
 
+
     <script>
 
-        // امتیاز ذخیره شده را می‌خوانیم
+        // اتصال به Telegram
+        const tg = window.Telegram.WebApp;
+
+        // آماده کردن Mini App
+        tg.ready();
+
+        // اطلاعات کاربر
+        const user = tg.initDataUnsafe.user;
+
+        if (user) {
+
+            document.getElementById("user").textContent =
+                "سلام " + (user.first_name || "دوست من") + " 👋";
+
+        } else {
+
+            document.getElementById("user").textContent =
+                "سلام 👋 خوش آمدی!";
+
+        }
+
+
+        // امتیاز ذخیره شده
         let savedScore = localStorage.getItem("my_score");
 
         let score = savedScore ? Number(savedScore) : 0;
@@ -52,18 +83,18 @@
         const scoreElement = document.getElementById("score");
         const button = document.getElementById("addButton");
 
-        // نمایش امتیاز
         scoreElement.textContent = score;
 
-        // وقتی دکمه زده شد
+
+        // افزایش امتیاز
         button.addEventListener("click", function () {
 
             score = score + 1;
 
             scoreElement.textContent = score;
 
-            // ذخیره امتیاز
             localStorage.setItem("my_score", score);
+
         });
 
     </script>
