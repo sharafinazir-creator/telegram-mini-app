@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Mini App من</title>
 
+    <!-- Telegram WebApp -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -20,7 +26,7 @@
         }
 
         #user {
-            font-size: 22px;
+            font-size: 21px;
             margin: 30px 0;
         }
 
@@ -34,17 +40,25 @@
             padding: 15px 30px;
             border: none;
             border-radius: 12px;
+            cursor: pointer;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
     <h1>🎮 Mini App من</h1>
 
-    <p id="user">در حال دریافت اطلاعات...</p>
+    <div id="user">
+        در حال دریافت اطلاعات...
+    </div>
 
-    <div id="score">0</div>
+    <div id="score">
+        0
+    </div>
 
     <button id="addButton">
         ➕ افزایش امتیاز
@@ -53,39 +67,48 @@
 
     <script>
 
-        // اتصال به Telegram
+        // Telegram WebApp
         const tg = window.Telegram.WebApp;
 
-        // آماده کردن Mini App
+        // آماده کردن برنامه
         tg.ready();
 
-        // اطلاعات کاربر
+
+        // اطلاعات کاربر تلگرام
         const user = tg.initDataUnsafe.user;
 
+
+        // نمایش اطلاعات کاربر
         if (user) {
 
-    document.getElementById("user").innerHTML =
-        "سلام " + (user.first_name || "دوست من") + " 👋<br><br>" +
-        "شناسه شما: " + user.id;
-
-        }
+            document.getElementById("user").innerHTML =
+                "سلام " + (user.first_name || "دوست من") +
+                " 👋<br><br>" +
+                "شناسه شما: " + user.id;
 
         } else {
 
-            document.getElementById("user").textContent =
-                "سلام 👋 خوش آمدی!";
+            document.getElementById("user").innerHTML =
+                "کاربر تلگرام شناسایی نشد ❌";
 
         }
 
 
-        // امتیاز ذخیره شده
+        // دریافت امتیاز ذخیره شده
         let savedScore = localStorage.getItem("my_score");
 
         let score = savedScore ? Number(savedScore) : 0;
 
-        const scoreElement = document.getElementById("score");
-        const button = document.getElementById("addButton");
 
+        // عناصر صفحه
+        const scoreElement =
+            document.getElementById("score");
+
+        const button =
+            document.getElementById("addButton");
+
+
+        // نمایش امتیاز
         scoreElement.textContent = score;
 
 
@@ -103,4 +126,5 @@
     </script>
 
 </body>
+
 </html>
