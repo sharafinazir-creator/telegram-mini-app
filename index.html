@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Mini App من</title>
 
     <style>
@@ -28,7 +26,6 @@
             padding: 15px 30px;
             border: none;
             border-radius: 12px;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -47,47 +44,29 @@
 
     <script>
 
-        let score = 0;
+        // امتیاز ذخیره شده را می‌خوانیم
+        let savedScore = localStorage.getItem("my_score");
+
+        let score = savedScore ? Number(savedScore) : 0;
 
         const scoreElement = document.getElementById("score");
         const button = document.getElementById("addButton");
 
+        // نمایش امتیاز
+        scoreElement.textContent = score;
+
+        // وقتی دکمه زده شد
         button.addEventListener("click", function () {
 
             score = score + 1;
 
             scoreElement.textContent = score;
 
+            // ذخیره امتیاز
+            localStorage.setItem("my_score", score);
         });
 
     </script>
 
 </body>
-
 </html>
-<script>
-
-    let score = localStorage.getItem("score");
-
-    if (score === null) {
-        score = 0;
-    } else {
-        score = Number(score);
-    }
-
-    const scoreElement = document.getElementById("score");
-    const button = document.getElementById("addButton");
-
-    scoreElement.textContent = score;
-
-    button.addEventListener("click", function () {
-
-        score = score + 1;
-
-        scoreElement.textContent = score;
-
-        localStorage.setItem("score", score);
-
-    });
-
-</script>
