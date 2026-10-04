@@ -1,67 +1,26 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<script>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    let score = localStorage.getItem("score");
 
-    <title>Mini App من</title>
+    if (score === null) {
+        score = 0;
+    } else {
+        score = Number(score);
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 40px 20px;
-        }
+    const scoreElement = document.getElementById("score");
+    const button = document.getElementById("addButton");
 
-        h1 {
-            font-size: 28px;
-        }
+    scoreElement.textContent = score;
 
-        #score {
-            font-size: 40px;
-            margin: 30px;
-        }
+    button.addEventListener("click", function () {
 
-        button {
-            font-size: 20px;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-    </style>
-</head>
+        score = score + 1;
 
-<body>
+        scoreElement.textContent = score;
 
-    <h1>🎮 Mini App من</h1>
+        localStorage.setItem("score", score);
 
-    <p>سلام 👋 خوش آمدی!</p>
+    });
 
-    <div id="score">0</div>
-
-    <button id="addButton">
-        ➕ افزایش امتیاز
-    </button>
-
-    <script>
-
-        let score = 0;
-
-        const scoreElement = document.getElementById("score");
-        const button = document.getElementById("addButton");
-
-        button.addEventListener("click", function () {
-
-            score = score + 1;
-
-            scoreElement.textContent = score;
-
-        });
-
-    </script>
-
-</body>
-
-</html>
+</script>
