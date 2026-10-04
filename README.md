@@ -1,1 +1,20 @@
-# telegram-mini-app
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اولین Mini App من</title>
+</head>
+
+<body>
+
+    <h1>🎉 سلام!</h1>
+
+    <p>این اولین Telegram Mini App من است.</p>
+
+    <button onclick="alert('دکمه کار کرد!')">
+        👆 کلیک کن
+    </button>
+
+</body>
+</html>
