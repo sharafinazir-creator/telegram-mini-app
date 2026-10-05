@@ -1,231 +1,401 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOGS EarningBot</title>
 
-    <meta charset="UTF-8">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <title>Mini App من</title>
+    body {
+      margin: 0;
+      background: #0b0b0f;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    .app {
+      max-width: 480px;
+      margin: auto;
+      padding: 20px;
+      padding-bottom: 90px;
+    }
 
-    <style>
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
 
-        body {
-            margin: 0;
-            padding: 25px 15px;
-            font-family: Arial, sans-serif;
-            background: #f2f4f7;
-            text-align: center;
-        }
+    .dog {
+      width: 55px;
+      height: 55px;
+      background: #d6a84f;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
 
-        .container {
-            max-width: 400px;
-            margin: auto;
-        }
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
 
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
+    .sub {
+      color: #999;
+      font-size: 13px;
+      margin-top: 4px;
+    }
 
-        .avatar {
-            font-size: 60px;
-        }
+    .card {
+      background: #15151c;
+      border: 1px solid #282832;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
 
-        #userName {
-            font-size: 24px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+    .balance {
+      text-align: center;
+    }
 
-        #userId {
-            color: #777;
-            margin-top: 8px;
-        }
+    .balance-title {
+      color: #999;
+      font-size: 13px;
+    }
 
-        .score-title {
-            margin-top: 30px;
-            font-size: 18px;
-        }
+    .balance-number {
+      font-size: 34px;
+      font-weight: bold;
+      color: #e2b85c;
+      margin: 8px 0;
+    }
 
-        #score {
-            font-size: 55px;
-            font-weight: bold;
-            margin: 10px;
-        }
+    .coin {
+      font-size: 15px;
+      color: #aaa;
+    }
 
-        #level {
-            font-size: 22px;
-            margin-bottom: 25px;
-        }
+    .user {
+      color: #ddd;
+      font-size: 14px;
+    }
 
-        #addButton {
-            width: 100%;
-            padding: 17px;
-            font-size: 20px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            background: #2196f3;
-            color: white;
-        }
+    .level {
+      color: #e2b85c;
+      font-weight: bold;
+      margin-top: 5px;
+    }
 
-        #addButton:active {
-            transform: scale(0.95);
-        }
+    .mining-box {
+      text-align: center;
+    }
 
-    </style>
+    .mining-status {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
 
+    .speed {
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .gold-btn {
+      background: #d6a84f;
+      color: #111;
+    }
+
+    .gold-btn:disabled {
+      background: #555;
+      color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .message {
+      text-align: center;
+      color: #aaa;
+      font-size: 13px;
+      min-height: 20px;
+      margin-top: 10px;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #111116;
+      border-top: 1px solid #292933;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 5px;
+    }
+
+    .nav div {
+      color: #888;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .nav div.active {
+      color: #e2b85c;
+    }
+  </style>
 </head>
-
 
 <body>
 
-<div class="container">
+  <div class="app">
+
+    <div class="header">
+      <div class="dog">🐕</div>
+      <div>
+        <h1>DOGS EarningBot</h1>
+        <div class="sub">Mine DOGS • Earn • Grow</div>
+      </div>
+    </div>
+
+    <div class="card balance">
+      <div class="balance-title">Your Balance</div>
+
+      <div class="balance-number" id="balance">
+        0
+      </div>
+
+      <div class="coin">DOGS</div>
+    </div>
 
     <div class="card">
+      <div class="user">
+        Welcome, <strong id="username">User</strong>
+      </div>
 
-        <div class="avatar">
-            👤
-        </div>
+      <div class="level" id="level">
+        🥉 Free Miner
+      </div>
+    </div>
 
-        <div id="userName">
-            در حال دریافت...
-        </div>
+    <div class="card mining-box">
 
-        <div id="userId">
-            ...
-        </div>
+      <div class="mining-status" id="miningStatus">
+        Ready to mine
+      </div>
 
+      <div class="speed">
+        Mining speed:
+        <strong id="speed">5 DOGS/hour</strong>
+      </div>
 
-        <div class="score-title">
-            🏆 امتیاز شما
-        </div>
+      <button
+        class="gold-btn"
+        id="mineButton"
+        onclick="startMining()"
+      >
+        🚀 Start Mining
+      </button>
 
-        <div id="score">
-            0
-        </div>
-
-        <div id="level">
-            🥉 مبتدی
-        </div>
-
-
-        <button id="addButton">
-            ➕ افزایش امتیاز
-        </button>
+      <div class="message" id="message"></div>
 
     </div>
 
-</div>
+  </div>
+
+  <div class="nav">
+    <div class="active">🏠<br>Home</div>
+    <div>⛏️<br>Mining</div>
+    <div>🎯<br>Tasks</div>
+    <div>👥<br>Referral</div>
+    <div>💼<br>Wallet</div>
+  </div>
 
 
 <script>
 
-    const tg = window.Telegram.WebApp;
+  /* ==============================
+     SUPABASE SETTINGS
+     ============================== */
 
-    tg.ready();
+  const SUPABASE_URL = "YOUR_SUPABASE_URL";
+
+  const SUPABASE_KEY =
+    "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
 
-    // اطلاعات کاربر
-    const user = tg.initDataUnsafe.user;
+  /* ==============================
+     TELEGRAM
+     ============================== */
+
+  const tg = window.Telegram.WebApp;
+
+  tg.ready();
+  tg.expand();
+
+  const telegramUser =
+    tg.initDataUnsafe?.user;
 
 
-    if (user) {
+  /* ==============================
+     APP STATE
+     ============================== */
 
-        document.getElementById("userName").textContent =
-            "سلام " + (user.first_name || "دوست من") + " 👋";
+  let currentUser = null;
 
-        document.getElementById("userId").textContent =
-            "ID: " + user.id;
 
-    } else {
+  /* ==============================
+     CONNECT TO BACKEND
+     ============================== */
 
-        document.getElementById("userName").textContent =
-            "کاربر ناشناس";
+  async function connectUser() {
 
-        document.getElementById("userId").textContent =
-            "شناسه دریافت نشد";
-
+    if (!telegramUser) {
+      showMessage("Please open this app inside Telegram.");
+      return;
     }
 
+    try {
 
-    // دریافت امتیاز
-    let savedScore =
-        localStorage.getItem("my_score");
+      const response = await fetch(
+        SUPABASE_URL +
+        "/functions/v1/telegram-user",
+        {
+          method: "POST",
 
-    let score =
-        savedScore ? Number(savedScore) : 0;
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+          },
 
-
-    const scoreElement =
-        document.getElementById("score");
-
-    const levelElement =
-        document.getElementById("level");
-
-    const button =
-        document.getElementById("addButton");
-
-
-    // تعیین سطح
-    function updateLevel() {
-
-        if (score >= 100) {
-
-            levelElement.textContent =
-                "👑 استاد";
-
-        } else if (score >= 50) {
-
-            levelElement.textContent =
-                "🥇 حرفه‌ای";
-
-        } else if (score >= 10) {
-
-            levelElement.textContent =
-                "🥈 متوسط";
-
-        } else {
-
-            levelElement.textContent =
-                "🥉 مبتدی";
-
+          body: JSON.stringify({
+            initData: tg.initData
+          })
         }
+      );
 
-    }
+      const data = await response.json();
 
+      if (!response.ok) {
+        console.error(data);
 
-    // نمایش اولیه
-    scoreElement.textContent = score;
-
-    updateLevel();
-
-
-    // افزایش امتیاز
-    button.addEventListener("click", function () {
-
-        score++;
-
-        scoreElement.textContent = score;
-
-        localStorage.setItem(
-            "my_score",
-            score
+        showMessage(
+          "Unable to connect to server."
         );
 
-        updateLevel();
+        return;
+      }
 
-    });
+      currentUser = data.user;
+
+      updateUI();
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        "Connection error."
+      );
+    }
+  }
+
+
+  /* ==============================
+     UPDATE UI
+     ============================== */
+
+  function updateUI() {
+
+    if (!currentUser) return;
+
+    document.getElementById("username").textContent =
+      currentUser.first_name || "User";
+
+    document.getElementById("balance").textContent =
+      Number(currentUser.balance || 0).toLocaleString();
+
+    document.getElementById("speed").textContent =
+      Number(currentUser.mining_speed || 5) +
+      " DOGS/hour";
+
+    const level = Number(currentUser.level || 0);
+
+    const names = [
+      "🥉 Free Miner",
+      "🥈 Bronze",
+      "🥇 Silver",
+      "🏆 Gold",
+      "💎 Platinum",
+      "💎 Diamond",
+      "👑 Master",
+      "⚡ Elite",
+      "👑 Royal",
+      "🔥 Legend",
+      "🚀 Ultimate"
+    ];
+
+    document.getElementById("level").textContent =
+      names[level] || "🥉 Free Miner";
+  }
+
+
+  /* ==============================
+     START MINING
+     ============================== */
+
+  function startMining() {
+
+    if (!currentUser) {
+
+      showMessage(
+        "Please wait for connection..."
+      );
+
+      return;
+    }
+
+    showMessage(
+      "Mining system will be connected next."
+    );
+  }
+
+
+  /* ==============================
+     MESSAGE
+     ============================== */
+
+  function showMessage(text) {
+
+    document.getElementById("message").textContent =
+      text;
+  }
+
+
+  /* https://laiuyjthzvharbttaehy.supabase.co/rest/v1/
+     START APP
+     sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4- */
+
+  connectUser();
 
 </script>
 
 </body>
-
-</html>
+    </html>
