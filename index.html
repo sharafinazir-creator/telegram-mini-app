@@ -8,9 +8,7 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -80,8 +78,8 @@
     }
 
     .coin {
-      font-size: 15px;
       color: #aaa;
+      font-size: 15px;
     }
 
     .user {
@@ -100,7 +98,7 @@
     }
 
     .mining-status {
-      font-size: 16px;
+      font-size: 17px;
       margin-bottom: 10px;
     }
 
@@ -108,6 +106,13 @@
       color: #aaa;
       font-size: 13px;
       margin-bottom: 15px;
+    }
+
+    .timer {
+      color: #e2b85c;
+      font-size: 25px;
+      font-weight: bold;
+      margin: 15px 0;
     }
 
     button {
@@ -155,6 +160,7 @@
       color: #888;
       font-size: 11px;
       text-align: center;
+      cursor: pointer;
     }
 
     .nav div.active {
@@ -165,237 +171,407 @@
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <div class="header">
-      <div class="dog">🐕</div>
-      <div>
-        <h1>DOGS EarningBot</h1>
-        <div class="sub">Mine DOGS • Earn • Grow</div>
-      </div>
+  <div class="header">
+    <div class="dog">🐕</div>
+    <div>
+      <h1>DOGS EarningBot</h1>
+      <div class="sub">Mine DOGS • Earn • Grow</div>
+    </div>
+  </div>
+
+  <div class="card balance">
+    <div class="balance-title">Your Balance</div>
+    <div class="balance-number" id="balance">0</div>
+    <div class="coin">DOGS</div>
+  </div>
+
+  <div class="card">
+    <div class="user">
+      Welcome, <strong id="username">User</strong>
     </div>
 
-    <div class="card balance">
-      <div class="balance-title">Your Balance</div>
+    <div class="level" id="level">
+      🥉 Free Miner
+    </div>
+  </div>
 
-      <div class="balance-number" id="balance">
-        0
-      </div>
+  <div class="card mining-box">
 
-      <div class="coin">DOGS</div>
+    <div class="mining-status" id="miningStatus">
+      Ready to mine
     </div>
 
-    <div class="card">
-      <div class="user">
-        Welcome, <strong id="username">User</strong>
-      </div>
-
-      <div class="level" id="level">
-        🥉 Free Miner
-      </div>
+    <div class="speed">
+      Mining speed:
+      <strong id="speed">5 DOGS/hour</strong>
     </div>
 
-    <div class="card mining-box">
-
-      <div class="mining-status" id="miningStatus">
-        Ready to mine
-      </div>
-
-      <div class="speed">
-        Mining speed:
-        <strong id="speed">5 DOGS/hour</strong>
-      </div>
-
-      <button
-        class="gold-btn"
-        id="mineButton"
-        onclick="startMining()"
-      >
-        🚀 Start Mining
-      </button>
-
-      <div class="message" id="message"></div>
-
+    <div class="timer" id="timer">
+      04:00:00
     </div>
+
+    <button
+      class="gold-btn"
+      id="mineButton"
+      onclick="startMining()"
+    >
+      🚀 Start Mining
+    </button>
+
+    <div class="message" id="message"></div>
 
   </div>
 
-  <div class="nav">
-    <div class="active">🏠<br>Home</div>
-    <div>⛏️<br>Mining</div>
-    <div>🎯<br>Tasks</div>
-    <div>👥<br>Referral</div>
-    <div>💼<br>Wallet</div>
-  </div>
+</div>
 
+<div class="nav">
+  <div class="active">🏠<br>Home</div>
+  <div>⛏️<br>Mining</div>
+  <div>🎯<br>Tasks</div>
+  <div>👥<br>Referral</div>
+  <div>💼<br>Wallet</div>
+</div>
 
 <script>
 
-  /* ==============================
-     SUPABASE SETTINGS
-     ============================== */
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
 
-  const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_KEY =
+  "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
-  const SUPABASE_KEY =
-    "YOUR_SUPABASE_PUBLISHABLE_KEY";
+const tg = window.Telegram.WebApp;
 
+tg.ready();
+tg.expand();
 
-  /* ==============================
-     TELEGRAM
-     ============================== */
-
-  const tg = window.Telegram.WebApp;
-
-  tg.ready();
-  tg.expand();
-
-  const telegramUser =
-    tg.initDataUnsafe?.user;
+let telegramUser = tg.initDataUnsafe?.user;
+let currentUser = null;
+let currentSession = null;
+let timerInterval = null;
 
 
-  /* ==============================
-     APP STATE
-     ============================== */
+/* =========================
+   CONNECT USER
+   ========================= */
 
-  let currentUser = null;
+async function connectUser() {
 
+  if (!telegramUser) {
+    showMessage("Please open this app inside Telegram.");
+    return;
+  }
 
-  /* ==============================
-     CONNECT TO BACKEND
-     ============================== */
+  try {
 
-  async function connectUser() {
+    const response = await fetch(
+      SUPABASE_URL +
+      "/functions/v1/telegram-user",
+      {
+        method: "POST",
 
-    if (!telegramUser) {
-      showMessage("Please open this app inside Telegram.");
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY
+        },
+
+        body: JSON.stringify({
+          initData: tg.initData
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error(data);
+      showMessage("Unable to connect to server.");
       return;
     }
 
-    try {
+    currentUser = data.user;
 
-      const response = await fetch(
-        SUPABASE_URL +
-        "/functions/v1/telegram-user",
-        {
-          method: "POST",
+    updateUI();
 
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": SUPABASE_KEY
-          },
+    await checkMining();
 
-          body: JSON.stringify({
-            initData: tg.initData
-          })
-        }
+  } catch (error) {
+
+    console.error(error);
+    showMessage("Connection error.");
+  }
+}
+
+
+/* =========================
+   UPDATE UI
+   ========================= */
+
+function updateUI() {
+
+  if (!currentUser) return;
+
+  document.getElementById("username").textContent =
+    currentUser.first_name || "User";
+
+  document.getElementById("balance").textContent =
+    Number(currentUser.balance || 0).toLocaleString();
+
+  document.getElementById("speed").textContent =
+    Number(currentUser.mining_speed || 5) +
+    " DOGS/hour";
+
+  const level = Number(currentUser.level || 0);
+
+  const names = [
+    "🥉 Free Miner",
+    "🥈 Bronze",
+    "🥇 Silver",
+    "🏆 Gold",
+    "💎 Platinum",
+    "💎 Diamond",
+    "👑 Master",
+    "⚡ Elite",
+    "👑 Royal",
+    "🔥 Legend",
+    "🚀 Ultimate"
+  ];
+
+  document.getElementById("level").textContent =
+    names[level] || "🥉 Free Miner";
+}
+
+
+/* =========================
+   START MINING
+   ========================= */
+
+async function startMining() {
+
+  if (!currentUser) {
+    showMessage("Please wait...");
+    return;
+  }
+
+  const button =
+    document.getElementById("mineButton");
+
+  button.disabled = true;
+
+  showMessage("Starting mining...");
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/functions/v1/start-mining",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY
+        },
+
+        body: JSON.stringify({
+          initData: tg.initData
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    if (!response.ok) {
+      throw new Error(
+        data.error || "Mining failed"
+      );
+    }
+
+    if (!data.success) {
+      showMessage(
+        data.message || "Mining is already active."
       );
 
-      const data = await response.json();
+      button.disabled = true;
 
-      if (!response.ok) {
-        console.error(data);
-
-        showMessage(
-          "Unable to connect to server."
-        );
-
-        return;
+      if (data.session) {
+        currentSession = data.session;
+        startTimer();
       }
 
-      currentUser = data.user;
-
-      updateUI();
-
-    } catch (error) {
-
-      console.error(error);
-
-      showMessage(
-        "Connection error."
-      );
-    }
-  }
-
-
-  /* ==============================
-     UPDATE UI
-     ============================== */
-
-  function updateUI() {
-
-    if (!currentUser) return;
-
-    document.getElementById("username").textContent =
-      currentUser.first_name || "User";
-
-    document.getElementById("balance").textContent =
-      Number(currentUser.balance || 0).toLocaleString();
-
-    document.getElementById("speed").textContent =
-      Number(currentUser.mining_speed || 5) +
-      " DOGS/hour";
-
-    const level = Number(currentUser.level || 0);
-
-    const names = [
-      "🥉 Free Miner",
-      "🥈 Bronze",
-      "🥇 Silver",
-      "🏆 Gold",
-      "💎 Platinum",
-      "💎 Diamond",
-      "👑 Master",
-      "⚡ Elite",
-      "👑 Royal",
-      "🔥 Legend",
-      "🚀 Ultimate"
-    ];
-
-    document.getElementById("level").textContent =
-      names[level] || "🥉 Free Miner";
-  }
-
-
-  /* ==============================
-     START MINING
-     ============================== */
-
-  function startMining() {
-
-    if (!currentUser) {
-
-      showMessage(
-        "Please wait for connection..."
-      );
-
       return;
     }
 
+    currentSession = data.session;
+
+    showMessage("Mining started successfully!");
+
+    startTimer();
+
+  } catch (error) {
+
+    console.error(error);
+
     showMessage(
-      "Mining system will be connected next."
+      "Mining error: " + error.message
     );
+
+    button.disabled = false;
   }
+}
 
 
-  /* ==============================
-     MESSAGE
-     ============================== */
+/* =========================
+   CHECK ACTIVE MINING
+   ========================= */
 
-  function showMessage(text) {
+async function checkMining() {
 
-    document.getElementById("message").textContent =
-      text;
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/mining_sessions?select=*&user_id=eq." +
+      currentUser.id +
+      "&claimed=eq.false&ends_at=gt." +
+      encodeURIComponent(new Date().toISOString()) +
+      "&order=created_at.desc&limit=1",
+      {
+        headers: {
+          "apikey": SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!response.ok) return;
+
+    const sessions = await response.json();
+
+    if (sessions.length > 0) {
+
+      currentSession = sessions[0];
+
+      document.getElementById(
+        "mineButton"
+      ).disabled = true;
+
+      startTimer();
+    }
+
+  } catch (error) {
+
+    console.error(error);
   }
+}
 
 
-  /* const SUPABASE_URL = "https://laiuyjthzvharbttaehy.supabase.co/rest/v1/";
-     START APP
-    const SUPABASE_KEY = "sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-";  */
+/* =========================
+   TIMER
+   ========================= */
 
-  connectUser();
+function startTimer() {
+
+  if (!currentSession) return;
+
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+
+    const end =
+      new Date(currentSession.ends_at).getTime();
+
+    const now = Date.now();
+
+    const remaining =
+      Math.max(0, end - now);
+
+    const totalSeconds =
+      Math.floor(remaining / 1000);
+
+    const hours =
+      Math.floor(totalSeconds / 3600);
+
+    const minutes =
+      Math.floor((totalSeconds % 3600) / 60);
+
+    const seconds =
+      totalSeconds % 60;
+
+    document.getElementById("timer").textContent =
+      String(hours).padStart(2, "0") + ":" +
+      String(minutes).padStart(2, "0") + ":" +
+      String(seconds).padStart(2, "0");
+
+    document.getElementById(
+      "miningStatus"
+    ).textContent =
+      "⛏️ Mining in progress";
+
+    if (remaining <= 0) {
+
+      clearInterval(timerInterval);
+
+      document.getElementById(
+        "miningStatus"
+      ).textContent =
+        "🎉 Mining complete";
+
+      document.getElementById(
+        "mineButton"
+      ).disabled = false;
+
+      document.getElementById(
+        "mineButton"
+      ).textContent =
+        "💰 Claim Reward";
+
+      document.getElementById(
+        "mineButton"
+      ).onclick = claimReward;
+
+      showMessage(
+        "Your mining cycle is complete."
+      );
+    }
+
+  }, 1000);
+}
+
+
+/* =========================
+   CLAIM PLACEHOLDER
+   ========================= */
+
+function claimReward() {
+
+  showMessage(
+    "Claim system will be connected next."
+  );
+}
+
+
+/* =========================
+   MESSAGE
+   ========================= */
+
+function showMessage(text) {
+
+  document.getElementById(
+    "message"
+  ).textContent = text;
+}
+
+
+/* const SUPABASE_URL = "https://laiuyjthzvharbttaehy.supabase.co/rest/v1/";
+   START APP
+   const SUPABASE_KEY = "sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-"; */
+
+connectUser();
 
 </script>
 
 </body>
-  </html>
+        </html>
