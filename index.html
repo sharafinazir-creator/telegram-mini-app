@@ -1,252 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DOGS EarningBot</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DOGS EarningBot</title>
 
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+*{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      background: #0b0b0f;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
+body{
+margin:0;
+background:#0b0b0f;
+color:#fff;
+font-family:Arial,sans-serif
+}
 
-    .app {
-      max-width: 480px;
-      margin: auto;
-      padding: 20px;
-      padding-bottom: 90px;
-    }
+.app{
+max-width:480px;
+margin:auto;
+padding:20px 20px 90px
+}
 
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+.header{
+display:flex;
+align-items:center;
+gap:12px;
+margin-bottom:20px
+}
 
-    .dog {
-      width: 55px;
-      height: 55px;
-      background: #d6a84f;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-    }
+.dog{
+width:55px;
+height:55px;
+background:#d6a84f;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px
+}
 
-    h1 {
-      margin: 0;
-      font-size: 22px;
-    }
+h1{
+margin:0;
+font-size:22px
+}
 
-    .sub {
-      color: #999;
-      font-size: 13px;
-      margin-top: 4px;
-    }
+.sub{
+color:#999;
+font-size:13px;
+margin-top:4px
+}
 
-    .card {
-      background: #15151c;
-      border: 1px solid #282832;
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 15px;
-    }
+.card{
+background:#15151c;
+border:1px solid #282832;
+border-radius:18px;
+padding:20px;
+margin-bottom:15px
+}
 
-    .balance {
-      text-align: center;
-    }
+.balance{text-align:center}
 
-    .balance-title {
-      color: #999;
-      font-size: 13px;
-    }
+.balance-title{
+color:#999;
+font-size:13px
+}
 
-    .balance-number {
-      font-size: 34px;
-      font-weight: bold;
-      color: #e2b85c;
-      margin: 8px 0;
-    }
+.balance-number{
+font-size:34px;
+font-weight:bold;
+color:#e2b85c;
+margin:8px 0
+}
 
-    .coin {
-      color: #aaa;
-      font-size: 15px;
-    }
+.coin{
+color:#aaa;
+font-size:15px
+}
 
-    .user {
-      color: #ddd;
-      font-size: 14px;
-    }
+.user{
+color:#ddd;
+font-size:14px
+}
 
-    .level {
-      color: #e2b85c;
-      font-weight: bold;
-      margin-top: 5px;
-    }
+.level{
+color:#e2b85c;
+font-weight:bold;
+margin-top:6px
+}
 
-    .mining-box {
-      text-align: center;
-    }
+.mining-box{text-align:center}
 
-    .mining-status {
-      font-size: 17px;
-      margin-bottom: 10px;
-    }
+.mining-status{
+font-size:17px;
+margin-bottom:10px
+}
 
-    .speed {
-      color: #aaa;
-      font-size: 13px;
-      margin-bottom: 15px;
-    }
+.speed{
+color:#aaa;
+font-size:13px;
+margin-bottom:15px
+}
 
-    .timer {
-      color: #e2b85c;
-      font-size: 25px;
-      font-weight: bold;
-      margin: 15px 0;
-    }
+.timer{
+color:#e2b85c;
+font-size:25px;
+font-weight:bold;
+margin:15px 0
+}
 
-    button {
-      width: 100%;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+button{
+width:100%;
+border:0;
+border-radius:12px;
+padding:14px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer
+}
 
-    .gold-btn {
-      background: #d6a84f;
-      color: #111;
-    }
+.gold-btn{
+background:#d6a84f;
+color:#111
+}
 
-    .gold-btn:disabled {
-      background: #555;
-      color: #aaa;
-      cursor: not-allowed;
-    }
+.gold-btn:disabled{
+background:#555;
+color:#aaa
+}
 
-    .message {
-      text-align: center;
-      color: #aaa;
-      font-size: 13px;
-      min-height: 20px;
-      margin-top: 10px;
-    }
+.message{
+text-align:center;
+color:#aaa;
+font-size:13px;
+min-height:20px;
+margin-top:10px
+}
 
-    .nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: #111116;
-      border-top: 1px solid #292933;
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 5px;
-    }
+.nav{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111116;
+border-top:1px solid #292933;
+display:flex;
+justify-content:space-around;
+padding:12px 5px
+}
 
-    .nav div {
-      color: #888;
-      font-size: 11px;
-      text-align: center;
-      cursor: pointer;
-    }
+.nav div{
+color:#888;
+font-size:11px;
+text-align:center
+}
 
-    .nav div.active {
-      color: #e2b85c;
-    }
-  </style>
+.nav .active{
+color:#e2b85c
+}
+</style>
 </head>
 
 <body>
 
 <div class="app">
 
-  <div class="header">
-    <div class="dog">🐕</div>
-    <div>
-      <h1>DOGS EarningBot</h1>
-      <div class="sub">Mine DOGS • Earn • Grow</div>
-    </div>
-  </div>
+<div class="header">
+<div class="dog">🐕</div>
+<div>
+<h1>DOGS EarningBot</h1>
+<div class="sub">Mine DOGS • Earn • Grow</div>
+</div>
+</div>
 
-  <div class="card balance">
-    <div class="balance-title">Your Balance</div>
-    <div class="balance-number" id="balance">0</div>
-    <div class="coin">DOGS</div>
-  </div>
+<div class="card balance">
+<div class="balance-title">Your Balance</div>
+<div class="balance-number" id="balance">0</div>
+<div class="coin">DOGS</div>
+</div>
 
-  <div class="card">
-    <div class="user">
-      Welcome, <strong id="username">User</strong>
-    </div>
+<div class="card">
+<div class="user">
+Welcome, <strong id="username">User</strong>
+</div>
 
-    <div class="level" id="level">
-      🥉 Free Miner
-    </div>
-  </div>
+<div class="level" id="level">
+🥉 Free Miner
+</div>
+</div>
 
-  <div class="card mining-box">
+<div class="card mining-box">
 
-    <div class="mining-status" id="miningStatus">
-      Ready to mine
-    </div>
+<div class="mining-status" id="miningStatus">
+Ready to mine
+</div>
 
-    <div class="speed">
-      Mining speed:
-      <strong id="speed">5 DOGS/hour</strong>
-    </div>
+<div class="speed">
+Mining speed:
+<strong id="speed">5 DOGS/hour</strong>
+</div>
 
-    <div class="timer" id="timer">
-      04:00:00
-    </div>
+<div class="timer" id="timer">
+04:00:00
+</div>
 
-    <button
-      class="gold-btn"
-      id="mineButton"
-      onclick="startMining()"
-    >
-      🚀 Start Mining
-    </button>
+<button
+class="gold-btn"
+id="mineButton"
+onclick="startMining()">
+🚀 Start Mining
+</button>
 
-    <div class="message" id="message"></div>
+<div class="message" id="message"></div>
 
-  </div>
+</div>
 
 </div>
 
 <div class="nav">
-  <div class="active">🏠<br>Home</div>
-  <div>⛏️<br>Mining</div>
-  <div>🎯<br>Tasks</div>
-  <div>👥<br>Referral</div>
-  <div>💼<br>Wallet</div>
+<div class="active">🏠<br>Home</div>
+<div>⛏️<br>Mining</div>
+<div>🎯<br>Tasks</div>
+<div>👥<br>Referral</div>
+<div>💼<br>Wallet</div>
 </div>
 
 <script>
 
-const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_URL =
+"https://laiuyjthzvharbttaehy.supabase.co";
 
 const SUPABASE_KEY =
-  "YOUR_SUPABASE_PUBLISHABLE_KEY";
+"YOUR_SUPABASE_PUBLISHABLE_KEY";
 
 const tg = window.Telegram.WebApp;
 
 tg.ready();
 tg.expand();
 
-let telegramUser = tg.initDataUnsafe?.user;
+const telegramUser = tg.initDataUnsafe?.user;
+
 let currentUser = null;
 let currentSession = null;
 let timerInterval = null;
@@ -254,324 +248,406 @@ let timerInterval = null;
 
 /* =========================
    CONNECT USER
-   ========================= */
+========================= */
 
-async function connectUser() {
+async function connectUser(){
 
-  if (!telegram-user-v2) {
-    showMessage("Please open this app inside Telegram.");
-    return;
-  }
+if(!telegramUser){
 
-  try {
+showMessage(
+"Please open this app inside Telegram."
+);
 
-    const response = await fetch(
-      SUPABASE_URL +
-      /functions/v1/telegram-user-v2,
-      {
-        method: "POST",
+return;
+}
 
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY
-        },
+try{
 
-        body: JSON.stringify({
-          initData: tg.initData
-        })
-      }
-    );
+showMessage("Connecting...");
 
-    const data = await response.json();
+const response = await fetch(
+SUPABASE_URL +
+"/functions/v1/telegram-user-v2",
+{
+method:"POST",
 
-    if (!response.ok) {
-      console.error(data);
-      showMessage("Unable to connect to server.");
-      return;
-    }
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY
+},
 
-    currentUser = data.user;
+body:JSON.stringify({
+initData:tg.initData
+})
+}
+);
 
-    updateUI();
+const data = await response.json();
 
-    await checkMining();
+console.log("telegram-user-v2:",data);
 
-  } catch (error) {
+if(!response.ok){
 
-    console.error(error);
-    showMessage("Connection error.");
-  }
+showMessage(
+"Server error: " +
+(data.error || response.status)
+);
+
+return;
+}
+
+if(!data.user){
+
+showMessage("User data not received.");
+
+return;
+}
+
+currentUser = data.user;
+
+updateUI();
+
+showMessage("Connected ✓");
+
+await checkMining();
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Connection error: " +
+error.message
+);
+
+}
+
 }
 
 
 /* =========================
    UPDATE UI
-   ========================= */
+========================= */
 
-function updateUI() {
+function updateUI(){
 
-  if (!currentUser) return;
+if(!currentUser)return;
 
-  document.getElementById("username").textContent =
-    currentUser.first_name || "User";
+document.getElementById("username")
+.textContent =
+currentUser.first_name || "User";
 
-  document.getElementById("balance").textContent =
-    Number(currentUser.balance || 0).toLocaleString();
+document.getElementById("balance")
+.textContent =
+Number(
+currentUser.balance || 0
+).toLocaleString();
 
-  document.getElementById("speed").textContent =
-    Number(currentUser.mining_speed || 5) +
-    " DOGS/hour";
+document.getElementById("speed")
+.textContent =
+Number(
+currentUser.mining_speed || 5
+) +
+" DOGS/hour";
 
-  const level = Number(currentUser.level || 0);
+const level =
+Number(currentUser.level || 0);
 
-  const names = [
-    "🥉 Free Miner",
-    "🥈 Bronze",
-    "🥇 Silver",
-    "🏆 Gold",
-    "💎 Platinum",
-    "💎 Diamond",
-    "👑 Master",
-    "⚡ Elite",
-    "👑 Royal",
-    "🔥 Legend",
-    "🚀 Ultimate"
-  ];
+const names=[
+"🥉 Free Miner",
+"🥈 Bronze",
+"🥇 Silver",
+"🏆 Gold",
+"💎 Platinum",
+"💎 Diamond",
+"👑 Master",
+"⚡ Elite",
+"👑 Royal",
+"🔥 Legend",
+"🚀 Ultimate"
+];
 
-  document.getElementById("level").textContent =
-    names[level] || "🥉 Free Miner";
+document.getElementById("level")
+.textContent =
+names[level] ||
+"🥉 Free Miner";
+
 }
 
 
 /* =========================
    START MINING
-   ========================= */
+========================= */
 
-async function startMining() {
+async function startMining(){
 
-  if (!currentUser) {
-    showMessage("Please wait...");
-    return;
-  }
+if(!currentUser){
 
-  const button =
-    document.getElementById("mineButton");
+showMessage("Please wait...");
 
-  button.disabled = true;
+return;
+}
 
-  showMessage("Starting mining...");
+const button =
+document.getElementById("mineButton");
 
-  try {
+button.disabled=true;
 
-    const response = await fetch(
-      SUPABASE_URL +
-      "/functions/v1/start-mining",
-      {
-        method: "POST",
+showMessage("Starting mining...");
 
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY
-        },
+try{
 
-        body: JSON.stringify({
-          initData: tg.initData
-        })
-      }
-    );
+const response=await fetch(
+SUPABASE_URL+
+"/functions/v1/start-mining",
+{
+method:"POST",
 
-    const data = await response.json();
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY
+},
 
-    console.log(data);
+body:JSON.stringify({
+initData:tg.initData
+})
+}
+);
 
-    if (!response.ok) {
-      throw new Error(
-        data.error || "Mining failed"
-      );
-    }
+const data=await response.json();
 
-    if (!data.success) {
-      showMessage(
-        data.message || "Mining is already active."
-      );
+console.log("start-mining:",data);
 
-      button.disabled = true;
+if(!response.ok){
 
-      if (data.session) {
-        currentSession = data.session;
-        startTimer();
-      }
+throw new Error(
+data.error ||
+"Mining failed"
+);
 
-      return;
-    }
+}
 
-    currentSession = data.session;
+if(!data.success){
 
-    showMessage("Mining started successfully!");
+showMessage(
+data.message ||
+"Mining is already active."
+);
 
-    startTimer();
+if(data.session){
 
-  } catch (error) {
+currentSession=data.session;
+startTimer();
 
-    console.error(error);
+}
 
-    showMessage(
-      "Mining error: " + error.message
-    );
+return;
+}
 
-    button.disabled = false;
-  }
+currentSession=data.session;
+
+showMessage(
+"Mining started successfully!"
+);
+
+startTimer();
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Mining error: "+
+error.message
+);
+
+button.disabled=false;
+
+}
+
 }
 
 
 /* =========================
-   CHECK ACTIVE MINING
-   ========================= */
+   CHECK MINING
+========================= */
 
-async function checkMining() {
+async function checkMining(){
 
-  try {
+if(!currentUser)return;
 
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/mining_sessions?select=*&user_id=eq." +
-      currentUser.id +
-      "&claimed=eq.false&ends_at=gt." +
-      encodeURIComponent(new Date().toISOString()) +
-      "&order=created_at.desc&limit=1",
-      {
-        headers: {
-          "apikey": SUPABASE_KEY
-        }
-      }
-    );
+try{
 
-    if (!response.ok) return;
+const url =
+SUPABASE_URL+
+"/rest/v1/mining_sessions"+
+"?select=*"+
+"&user_id=eq."+
+currentUser.id+
+"&claimed=eq.false"+
+"&ends_at=gt."+
+encodeURIComponent(
+new Date().toISOString()
+)+
+"&order=created_at.desc"+
+"&limit=1";
 
-    const sessions = await response.json();
+const response=await fetch(
+url,
+{
+headers:{
+"apikey":SUPABASE_KEY
+}
+}
+);
 
-    if (sessions.length > 0) {
+if(!response.ok)return;
 
-      currentSession = sessions[0];
+const sessions=
+await response.json();
 
-      document.getElementById(
-        "mineButton"
-      ).disabled = true;
+if(sessions.length>0){
 
-      startTimer();
-    }
+currentSession=sessions[0];
 
-  } catch (error) {
+document.getElementById(
+"mineButton"
+).disabled=true;
 
-    console.error(error);
-  }
+startTimer();
+
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
 }
 
 
 /* =========================
    TIMER
-   ========================= */
+========================= */
 
-function startTimer() {
+function startTimer(){
 
-  if (!currentSession) return;
+if(!currentSession)return;
 
-  clearInterval(timerInterval);
+clearInterval(timerInterval);
 
-  timerInterval = setInterval(() => {
+timerInterval=setInterval(()=>{
 
-    const end =
-      new Date(currentSession.ends_at).getTime();
+const end =
+new Date(
+currentSession.ends_at
+).getTime();
 
-    const now = Date.now();
+const remaining =
+Math.max(
+0,
+end-Date.now()
+);
 
-    const remaining =
-      Math.max(0, end - now);
+const totalSeconds =
+Math.floor(
+remaining/1000
+);
 
-    const totalSeconds =
-      Math.floor(remaining / 1000);
+const hours =
+Math.floor(
+totalSeconds/3600
+);
 
-    const hours =
-      Math.floor(totalSeconds / 3600);
+const minutes =
+Math.floor(
+(totalSeconds%3600)/60
+);
 
-    const minutes =
-      Math.floor((totalSeconds % 3600) / 60);
+const seconds =
+totalSeconds%60;
 
-    const seconds =
-      totalSeconds % 60;
+document.getElementById(
+"timer"
+).textContent=
 
-    document.getElementById("timer").textContent =
-      String(hours).padStart(2, "0") + ":" +
-      String(minutes).padStart(2, "0") + ":" +
-      String(seconds).padStart(2, "0");
+String(hours).padStart(2,"0")+
+":"+
+String(minutes).padStart(2,"0")+
+":"+
+String(seconds).padStart(2,"0");
 
-    document.getElementById(
-      "miningStatus"
-    ).textContent =
-      "⛏️ Mining in progress";
+document.getElementById(
+"miningStatus"
+).textContent=
+"⛏️ Mining in progress";
 
-    if (remaining <= 0) {
+if(remaining<=0){
 
-      clearInterval(timerInterval);
+clearInterval(timerInterval);
 
-      document.getElementById(
-        "miningStatus"
-      ).textContent =
-        "🎉 Mining complete";
+document.getElementById(
+"miningStatus"
+).textContent=
+"🎉 Mining complete";
 
-      document.getElementById(
-        "mineButton"
-      ).disabled = false;
+const button=
+document.getElementById(
+"mineButton"
+);
 
-      document.getElementById(
-        "mineButton"
-      ).textContent =
-        "💰 Claim Reward";
+button.disabled=false;
 
-      document.getElementById(
-        "mineButton"
-      ).onclick = claimReward;
+button.textContent=
+"💰 Claim Reward";
 
-      showMessage(
-        "Your mining cycle is complete."
-      );
-    }
+button.onclick=claimReward;
 
-  }, 1000);
+showMessage(
+"Your mining cycle is complete."
+);
+
+}
+
+},1000);
+
 }
 
 
 /* =========================
-   CLAIM PLACEHOLDER
-   ========================= */
+   CLAIM
+========================= */
 
-function claimReward() {
+function claimReward(){
 
-  showMessage(
-    "Claim system will be connected next."
-  );
+showMessage(
+"Claim system will be connected next."
+);
+
 }
 
 
 /* =========================
    MESSAGE
-   ========================= */
+========================= */
 
-function showMessage(text) {
+function showMessage(text){
 
-  document.getElementById(
-    "message"
-  ).textContent = text;
+document.getElementById(
+"message"
+).textContent=text;
+
 }
 
 
-/* const SUPABASE_URL = "https://laiuyjthzvharbttaehy.supabase.co/rest/v1/";
-   START APP
-   const SUPABASE_KEY = "sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-"; */
+/* https://laiuyjthzvharbttaehy.supabase.co/rest/v1/
+   START
+sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4- */
 
 connectUser();
 
 </script>
 
 </body>
-        </html>
+  </html>
