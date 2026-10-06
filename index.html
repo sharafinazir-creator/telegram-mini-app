@@ -533,7 +533,7 @@ const SUPABASE_URL =
 "https://laiuyjthzvharbttaehy.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-";
+"sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-";
 
 
 const tg =
@@ -704,6 +704,8 @@ restoreSavedMining();
 if(!currentSession){
 await checkMining();
 }
+
+await checkStartReferral();
 
 }catch(e){
 
@@ -1394,77 +1396,52 @@ currentUser.referral_earnings || 0
 }
 
 
-async function applyReferral(){
-
-if(!currentUser || !tg) return;
-
-const input =
-$("referralInput");
-
-const code =
-input.value.trim();
-
-if(!code){
-
-showMessage(
-"Please enter a referral code."
-);
-
-return;
-
-}
-
-try{
-
 function shareReferralLink(){
 
-  if(!currentUser){
-    showMessage("Please wait...");
-    return;
-  }
-
-  const code =
-    currentUser.referral_code;
-
-  if(!code){
-    showMessage(
-      "Referral code is not available yet."
-    );
-    return;
-  }
-
-  const botUsername =
-    "Dogsearningbot";
-
-  const link =
-    "https://t.me/" +
-    botUsername +
-    "?start=" +
-    encodeURIComponent(code);
-
-  const text =
-    "🐕 Join DOGS EarningBot and start earning DOGS!\n\n" +
-    "Use my referral link:";
-
-  const shareUrl =
-    "https://t.me/share/url?url=" +
-    encodeURIComponent(link) +
-    "&text=" +
-    encodeURIComponent(text);
-
-  if(tg && tg.openTelegramLink){
-
-    tg.openTelegramLink(shareUrl);
-
-  }else{
-
-    window.open(
-      shareUrl,
-      "_blank"
-    );
-
-  }
+if(!currentUser){
+showMessage("Please wait...");
+return;
 }
+
+const code =
+currentUser.referral_code;
+
+if(!code){
+showMessage("Referral code is not available yet.");
+return;
+}
+
+const botUsername =
+"Dogsearningbot";
+
+const link =
+"https://t.me/" +
+botUsername +
+"?start=" +
+encodeURIComponent(code);
+
+const text =
+"🐕 Join DOGS EarningBot and start earning DOGS!\n\n" +
+"Use my referral link:";
+
+const shareUrl =
+"https://t.me/share/url?url=" +
+encodeURIComponent(link) +
+"&text=" +
+encodeURIComponent(text);
+
+if(tg && tg.openTelegramLink){
+
+tg.openTelegramLink(shareUrl);
+
+}else{
+
+window.open(shareUrl,"_blank");
+
+}
+
+}
+
 
 /* ---------------- COPY REFERRAL ---------------- */
 
@@ -1520,9 +1497,68 @@ showMessage(
 }
 
 
+/* ---------------- START PARAMETER ---------------- */
+
+async function checkStartReferral(){
+
+try{
+
+const startParam =
+tg?.initDataUnsafe?.start_param;
+
+if(!startParam || !currentUser || !tg) return;
+
+if(currentUser.referred_by){
+return;
+}
+
+showMessage("Applying referral...");
+
+const response =
+await fetch(
+SUPABASE_URL +
+"/functions/v1/referral",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY
+},
+
+body:JSON.stringify({
+initData:tg.initData,
+referralCode:startParam
+})
+
+}
+);
+
+const data =
+await response.json();
+
+if(!response.ok || !data.success){
+
+throw new Error(
+data.error || "Referral failed"
+);
+
+}
+
+currentUser.referred_by = true;
+
+showMessage("🎉 Referral applied successfully!");
+
+}catch(e){
+
+console.log("Referral:", e.message);
+
+}
+
+}
+
 
 /* ---------------- START APP ---------------- */
-
 
 connectUser();
 
