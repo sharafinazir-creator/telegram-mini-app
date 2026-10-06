@@ -4,108 +4,145 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>DOGS EarningBot</title>
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 *{box-sizing:border-box}
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
-background:#0b0b0d;
+background:#09090b;
 color:#fff;
 }
+
 .app{
 max-width:480px;
 margin:auto;
 min-height:100vh;
-padding:18px 15px 90px;
+padding:16px 14px 90px;
 }
+
 .top{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:18px;
+margin-bottom:15px;
 }
+
 .logo{
-font-size:22px;
+font-size:21px;
 font-weight:800;
 color:#f5c542;
 }
+
 .status{
 font-size:12px;
-color:#62e58b;
+color:#65df8b;
 }
-.card{
-background:#151519;
-border:1px solid #29292f;
-border-radius:18px;
-padding:18px;
+
+.welcome{
 margin-bottom:14px;
 }
+
+.welcome h2{
+margin:0 0 5px;
+font-size:23px;
+}
+
+.welcome p{
+margin:0;
+color:#888;
+font-size:14px;
+}
+
+.card{
+background:#151518;
+border:1px solid #29292f;
+border-radius:18px;
+padding:17px;
+margin-bottom:13px;
+}
+
 .balance{
 text-align:center;
 }
+
 .balance small{
-color:#999;
+color:#888;
 }
+
 .balance h1{
 font-size:34px;
 margin:8px 0;
 color:#f5c542;
 }
+
 .level{
 display:inline-block;
 padding:6px 12px;
 border-radius:20px;
-background:#25201a;
+background:#282218;
 color:#f5c542;
-font-size:13px;
+font-size:12px;
 }
+
 .mine{
 text-align:center;
 }
+
 .dog{
-font-size:60px;
-margin:4px;
+font-size:57px;
+margin:3px;
 }
+
 .speed{
-color:#aaa;
 font-size:14px;
+color:#999;
 }
+
 .timer{
 font-size:30px;
 font-weight:bold;
-margin:12px 0;
+margin:13px 0;
 }
+
 button{
 width:100%;
 border:0;
 border-radius:13px;
 padding:14px;
-font-size:16px;
+font-size:15px;
 font-weight:bold;
 background:#f5c542;
 color:#111;
 cursor:pointer;
 margin-top:8px;
 }
+
 button.secondary{
-background:#242429;
+background:#25252b;
 color:#fff;
 }
+
 button:disabled{
-opacity:.5;
+opacity:.55;
+cursor:not-allowed;
 }
+
 .title{
 font-size:18px;
 font-weight:bold;
 margin-bottom:12px;
 }
+
 .days{
 display:grid;
 grid-template-columns:repeat(7,1fr);
 gap:5px;
 }
+
 .day{
 background:#222228;
 border-radius:9px;
@@ -113,14 +150,40 @@ padding:8px 2px;
 text-align:center;
 font-size:10px;
 }
+
 .day.active{
 border:1px solid #f5c542;
 color:#f5c542;
 }
+
 .day.claimed{
 background:#263d2d;
 color:#6ee890;
 }
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.stat{
+background:#202025;
+border-radius:12px;
+padding:13px;
+text-align:center;
+}
+
+.stat b{
+display:block;
+font-size:20px;
+color:#f5c542;
+}
+
+.stat small{
+color:#999;
+}
+
 .refcode{
 background:#0d0d10;
 border:1px dashed #555;
@@ -131,26 +194,59 @@ font-weight:bold;
 color:#f5c542;
 word-break:break-all;
 }
-.stats{
-display:grid;
-grid-template-columns:1fr 1fr;
+
+.task{
+display:flex;
+justify-content:space-between;
+align-items:center;
 gap:10px;
-margin-top:12px;
-}
-.stat{
 background:#202025;
-border-radius:12px;
 padding:13px;
-text-align:center;
+border-radius:12px;
+margin-bottom:8px;
 }
-.stat b{
-display:block;
-font-size:20px;
+
+.task-info{
+flex:1;
+min-width:0;
+}
+
+.task-name{
+font-weight:bold;
+font-size:14px;
+}
+
+.task-reward{
+font-size:12px;
 color:#f5c542;
+margin-top:4px;
 }
-.stat small{
-color:#999;
+
+.task button{
+width:auto;
+min-width:80px;
+padding:9px 10px;
+margin:0;
+font-size:12px;
 }
+
+.msg{
+text-align:center;
+font-size:13px;
+color:#aaa;
+margin-top:8px;
+min-height:18px;
+line-height:1.4;
+}
+
+.error{
+color:#ff7777;
+}
+
+.success{
+color:#67df8c;
+}
+
 .nav{
 position:fixed;
 bottom:0;
@@ -161,28 +257,35 @@ margin:auto;
 background:#111115;
 border-top:1px solid #29292f;
 display:grid;
-grid-template-columns:repeat(4,1fr);
-padding:9px 5px;
+grid-template-columns:repeat(5,1fr);
+padding:7px 4px;
 z-index:10;
 }
+
 .nav button{
 background:none;
 color:#888;
-padding:7px 2px;
+padding:6px 2px;
 margin:0;
-font-size:11px;
+font-size:10px;
 }
+
 .nav button.active{
 color:#f5c542;
 }
-.page{display:none}
-.page.active{display:block}
-.msg{
+
+.page{
+display:none;
+}
+
+.page.active{
+display:block;
+}
+
+.empty{
 text-align:center;
-font-size:13px;
-color:#aaa;
-margin-top:8px;
-min-height:18px;
+color:#777;
+padding:15px 5px;
 }
 </style>
 </head>
@@ -197,40 +300,85 @@ min-height:18px;
 </div>
 
 <!-- HOME -->
+
 <div id="home" class="page active">
+
+<div class="welcome">
+<h2 id="welcomeName">Welcome 👋</h2>
+<p>Welcome to your DOGS earning dashboard.</p>
+</div>
 
 <div class="card balance">
 <small>Your Balance</small>
-<h1><span id="balance">0</span> DOGS</h1>
-<div class="level" id="level">Level 0 · Free Miner</div>
+
+<h1>
+<span id="balance">0</span> DOGS
+</h1>
+
+<div class="level" id="level">
+Level 0 · Free Miner
+</div>
 </div>
 
 <div class="card mine">
+
 <div class="dog">🐕</div>
+
 <div class="speed">
-Mining speed: <b id="speed">5</b> DOGS/hour
+Mining speed:
+<b id="speed">5</b> DOGS/hour
 </div>
 
-<div class="timer" id="timer">04:00:00</div>
+<div class="timer" id="timer">
+04:00:00
+</div>
 
 <button id="mineBtn" onclick="startMining()">
 ⚡ Start Mining
 </button>
 
 <div class="msg" id="mineMsg"></div>
+
 </div>
 
+<!-- DAILY BONUS -->
+
 <div class="card">
-<div class="title">🎁 Daily Bonus</div>
+
+<div class="title">
+🎁 Daily Bonus
+</div>
 
 <div class="days">
-<div class="day" id="d1">Day 1<br>20</div>
-<div class="day" id="d2">Day 2<br>30</div>
-<div class="day" id="d3">Day 3<br>40</div>
-<div class="day" id="d4">Day 4<br>50</div>
-<div class="day" id="d5">Day 5<br>60</div>
-<div class="day" id="d6">Day 6<br>70</div>
-<div class="day" id="d7">Day 7<br>80</div>
+
+<div class="day" id="d1">
+Day 1<br>20
+</div>
+
+<div class="day" id="d2">
+Day 2<br>30
+</div>
+
+<div class="day" id="d3">
+Day 3<br>40
+</div>
+
+<div class="day" id="d4">
+Day 4<br>50
+</div>
+
+<div class="day" id="d5">
+Day 5<br>60
+</div>
+
+<div class="day" id="d6">
+Day 6<br>70
+</div>
+
+<div class="day" id="d7">
+Day 7<br>80
+</div>
+
 </div>
 
 <button id="bonusBtn" onclick="claimDailyBonus()">
@@ -238,31 +386,83 @@ Mining speed: <b id="speed">5</b> DOGS/hour
 </button>
 
 <div class="msg" id="bonusMsg"></div>
+
 </div>
 
 </div>
 
 <!-- MINING -->
+
 <div id="mining" class="page">
+
 <div class="card mine">
+
 <div class="dog">⛏️</div>
-<div class="title">Mining Center</div>
-<p>Mine DOGS every 4 hours.</p>
-<div class="timer" id="timer2">04:00:00</div>
-<button onclick="startMining()">⚡ Start / Resume Mining</button>
+
+<div class="title">
+Mining Center
 </div>
+
+<p style="color:#888">
+Mine DOGS every 4 hours.
+</p>
+
+<div class="timer" id="timer2">
+04:00:00
+</div>
+
+<button id="mineBtn2" onclick="startMining()">
+⚡ Start Mining
+</button>
+
+<div class="msg" id="mineMsg2"></div>
+
+</div>
+
+</div>
+
+<!-- TASKS -->
+
+<div id="tasks" class="page">
+
+<div class="card">
+
+<div class="title">
+🎯 Tasks
+</div>
+
+<p style="color:#888">
+Complete tasks and earn extra DOGS.
+</p>
+
+<div id="tasksList">
+<div class="empty">
+Loading tasks...
+</div>
+</div>
+
+<div class="msg" id="taskMsg"></div>
+
+</div>
+
 </div>
 
 <!-- REFERRAL -->
+
 <div id="referral" class="page">
 
 <div class="card">
-<div class="title">👥 Referral Program</div>
-<p style="color:#aaa">
+
+<div class="title">
+👥 Referral Program
+</div>
+
+<p style="color:#888">
 Invite friends and earn DOGS.
 </p>
 
 <div class="stats">
+
 <div class="stat">
 <b id="refCount">0</b>
 <small>Referrals</small>
@@ -272,11 +472,16 @@ Invite friends and earn DOGS.
 <b id="refEarn">0</b>
 <small>Earned DOGS</small>
 </div>
+
 </div>
+
 </div>
 
 <div class="card">
-<div class="title">🔗 Your Referral Code</div>
+
+<div class="title">
+🔗 Your Referral Code
+</div>
 
 <div class="refcode" id="refCode">
 Loading...
@@ -291,76 +496,114 @@ Loading...
 </button>
 
 <div class="msg" id="refMsg"></div>
+
 </div>
 
 <div class="card">
-<div class="title">🎁 Rewards</div>
-<p style="color:#aaa;line-height:1.6">
-• First 10 referrals: <b>50 DOGS</b> each<br>
-• Up to 20 referred users<br>
-• After 10 referrals: <b>5%</b> mining bonus
+
+<div class="title">
+🎁 Referral Rewards
+</div>
+
+<p style="color:#aaa;line-height:1.7">
+• First 10 referrals:
+<b>50 DOGS</b> each<br>
+• Maximum:
+<b>20 referred users</b><br>
+• After 10 referrals:
+<b>5% mining bonus</b>
 </p>
+
 </div>
 
 </div>
 
 <!-- WALLET -->
+
 <div id="wallet" class="page">
 
 <div class="card">
-<div class="title">💰 Wallet</div>
+
+<div class="title">
+💰 Wallet
+</div>
+
 <h2 style="color:#f5c542">
 <span id="walletBalance">0</span> DOGS
 </h2>
 
 <p style="color:#888">
-Minimum withdrawal: 5,000 DOGS
+Minimum withdrawal:
+5,000 DOGS
 </p>
 
 <p style="color:#888">
-Withdrawal fee: 5%
+Withdrawal fee:
+5%
 </p>
 
 <button disabled>
 Withdraw — Coming Soon
 </button>
-</div>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- NAV -->
 
 <div class="nav">
-<button id="navHome" class="active" onclick="showPage('home')">🏠<br>Home</button>
-<button id="navMining" onclick="showPage('mining')">⛏️<br>Mining</button>
-<button id="navReferral" onclick="showPage('referral')">👥<br>Referral</button>
-<button id="navWallet" onclick="showPage('wallet')">💰<br>Wallet</button>
+
+<button id="navHome"
+class="active"
+onclick="showPage('home')">
+🏠<br>Home
+</button>
+
+<button id="navMining"
+onclick="showPage('mining')">
+⛏️<br>Mining
+</button>
+
+<button id="navTasks"
+onclick="showPage('tasks')">
+🎯<br>Tasks
+</button>
+
+<button id="navReferral"
+onclick="showPage('referral')">
+👥<br>Referral
+</button>
+
+<button id="navWallet"
+onclick="showPage('wallet')">
+💰<br>Wallet
+</button>
+
 </div>
 
 <script>
 
-const tg = window.Telegram.WebApp;
+const tg =
+window.Telegram.WebApp;
 
 tg.ready();
 tg.expand();
 
 /* =========================
-   SUPABASE
+SUPABASE
 ========================= */
 
 const SUPABASE_URL =
 "https://laiuyjthzvharbttaehy.supabase.co";
 
-/*
-IMPORTANT:
-Put your Supabase PUBLISHABLE KEY below.
-Do NOT put Service Role Key here.
-*/
-
 const SUPABASE_KEY =
 "sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-";
 
-const API = SUPABASE_URL + "/functions/v1";
+const API =
+SUPABASE_URL + "/functions/v1";
 
 let telegramUser = null;
 let userData = null;
@@ -368,58 +611,114 @@ let miningEnd = null;
 let timerInterval = null;
 
 /* =========================
-   TELEGRAM USER
+HELPER
+========================= */
+
+async function readJson(res){
+
+const text = await res.text();
+
+try{
+return JSON.parse(text);
+}catch{
+throw new Error(
+"Server returned invalid response"
+);
+}
+
+}
+
+/* =========================
+CONNECT USER
 ========================= */
 
 async function connectUser(){
 
 try{
 
-telegramUser = tg.initDataUnsafe?.user;
+telegramUser =
+tg.initDataUnsafe?.user;
 
 if(!telegramUser){
-throw new Error("Telegram user not available");
+
+throw new Error(
+"Telegram user not available"
+);
+
 }
 
-const res = await fetch(
+const res =
+await fetch(
 API + "/telegram-user-v2",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json",
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
+"Authorization":
+"Bearer " + SUPABASE_KEY
 },
 body:JSON.stringify({
 initData:tg.initData
 })
-});
+}
+);
 
-const data = await res.json();
+const data =
+await readJson(res);
 
 if(!res.ok || !data.success){
-throw new Error(data.error || "Connection failed");
+
+throw new Error(
+data.error ||
+"Connection failed"
+);
+
 }
 
-userData = data.user || data;
+userData =
+data.user || data;
+
+document.getElementById(
+"welcomeName"
+).textContent =
+"Welcome, " +
+(
+userData.first_name ||
+telegramUser.first_name ||
+"Miner"
+) +
+" 👋";
 
 balanceUpdate(
 userData.balance || 0
 );
 
-document.getElementById("speed").textContent =
+document.getElementById(
+"speed"
+).textContent =
 userData.mining_speed || 5;
 
-document.getElementById("level").textContent =
+document.getElementById(
+"level"
+).textContent =
 "Level " +
 (userData.level || 0) +
 " · " +
-getLevelName(userData.level || 0);
+getLevelName(
+userData.level || 0
+);
 
-document.getElementById("status").textContent =
+document.getElementById(
+"status"
+).textContent =
 "Connected ✓";
 
 loadReferral();
+
+renderBonus();
+
+loadTasks();
 
 restoreMining();
 
@@ -429,15 +728,22 @@ handleIncomingReferral();
 
 console.error(e);
 
-document.getElementById("status").textContent =
+document.getElementById(
+"status"
+).textContent =
 "Connection error";
+
+document.getElementById(
+"mineMsg"
+).textContent =
+e.message;
 
 }
 
 }
 
 /* =========================
-   LEVEL
+LEVEL
 ========================= */
 
 function getLevelName(level){
@@ -456,28 +762,76 @@ const names=[
 "Ultimate"
 ];
 
-return names[level] || "Free Miner";
+return names[level] ||
+"Free Miner";
 
 }
 
 /* =========================
-   BALANCE
+BALANCE
 ========================= */
 
 function balanceUpdate(value){
 
-const n = Number(value || 0);
+const n =
+Number(value || 0);
 
-document.getElementById("balance").textContent =
+document.getElementById(
+"balance"
+).textContent =
 n.toLocaleString();
 
-document.getElementById("walletBalance").textContent =
+document.getElementById(
+"walletBalance"
+).textContent =
 n.toLocaleString();
 
 }
 
 /* =========================
-   MINING
+MINING BUTTONS
+========================= */
+
+function setMiningButtons(
+text,
+disabled,
+claim=false
+){
+
+const b1 =
+document.getElementById("mineBtn");
+
+const b2 =
+document.getElementById("mineBtn2");
+
+[b1,b2].forEach(btn=>{
+
+if(!btn)return;
+
+btn.disabled =
+disabled;
+
+btn.textContent =
+text;
+
+if(claim){
+
+btn.onclick =
+claimReward;
+
+}else{
+
+btn.onclick =
+startMining;
+
+}
+
+});
+
+}
+
+/* =========================
+START MINING
 ========================= */
 
 async function startMining(){
@@ -485,71 +839,204 @@ async function startMining(){
 try{
 
 if(!telegramUser){
-return;
+
+throw new Error(
+"Telegram user not ready"
+);
+
 }
 
-const btn =
-document.getElementById("mineBtn");
+setMiningButtons(
+"Starting...",
+true
+);
 
-btn.disabled = true;
-btn.textContent = "Starting...";
+document.getElementById(
+"mineMsg"
+).textContent =
+"";
 
-const res = await fetch(
+document.getElementById(
+"mineMsg2"
+).textContent =
+"";
+
+const res =
+await fetch(
 API + "/start-mining",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json",
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
+"Authorization":
+"Bearer " + SUPABASE_KEY
 },
 body:JSON.stringify({
 initData:tg.initData
 })
-});
+}
+);
 
-const data = await res.json();
+const data =
+await readJson(res);
 
-if(!res.ok || !data.success){
+console.log(
+"START MINING:",
+data
+);
 
-if(
-data.error &&
-data.error.toLowerCase().includes("active")
-){
+if(!res.ok || data.success === false){
 
-await restoreMining();
-
-return;
+throw new Error(
+data.error ||
+"Mining could not be started"
+);
 
 }
 
-throw new Error(data.error || "Mining failed");
-}
+/*
+Different versions of the
+function may return different
+field names, so we check all.
+*/
+
+let end =
+data.endsAt ||
+data.ends_at ||
+data.endAt ||
+data.end_at;
+
+if(end){
 
 miningEnd =
-new Date(data.endsAt || data.endAt).getTime();
+new Date(end).getTime();
+
+}else{
+
+/*
+If the function does not return
+the end time, ask Supabase for
+the active session.
+*/
+
+await findActiveMining();
+
+}
+
+if(!miningEnd){
+
+throw new Error(
+"Mining started but session time was not returned"
+);
+
+}
 
 saveMining();
 
 startTimer();
 
-document.getElementById("mineMsg").textContent =
+document.getElementById(
+"mineMsg"
+).textContent =
 "Mining started successfully!";
+
+document.getElementById(
+"mineMsg2"
+).textContent =
+"Mining is active.";
 
 }catch(e){
 
 console.error(e);
 
-document.getElementById("mineMsg").textContent =
-e.message;
+setMiningButtons(
+"⚡ Start Mining",
+false
+);
 
-document.getElementById("mineBtn").disabled = false;
-document.getElementById("mineBtn").textContent =
-"⚡ Start Mining";
+document.getElementById(
+"mineMsg"
+).textContent =
+"❌ " + e.message;
+
+document.getElementById(
+"mineMsg2"
+).textContent =
+"❌ " + e.message;
 
 }
 
 }
+
+/* =========================
+FIND ACTIVE MINING
+========================= */
+
+async function findActiveMining(){
+
+if(!userData?.id){
+
+return;
+
+}
+
+const url =
+SUPABASE_URL +
+"/rest/v1/mining_sessions" +
+"?user_id=eq." +
+encodeURIComponent(userData.id) +
+"&claimed=eq.false" +
+"&select=*" +
+"&order=created_at.desc" +
+"&limit=1";
+
+const res =
+await fetch(
+url,
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":
+"Bearer " + SUPABASE_KEY
+}
+}
+);
+
+const rows =
+await readJson(res);
+
+if(
+Array.isArray(rows) &&
+rows.length
+){
+
+const session =
+rows[0];
+
+const end =
+new Date(
+session.ends_at
+).getTime();
+
+if(end > Date.now()){
+
+miningEnd =
+end;
+
+return;
+
+}
+
+}
+
+miningEnd = null;
+
+}
+
+/* =========================
+SAVE MINING
+========================= */
 
 function saveMining(){
 
@@ -564,70 +1051,54 @@ String(miningEnd)
 
 }
 
-function restoreMining(){
+/* =========================
+RESTORE MINING
+========================= */
+
+async function restoreMining(){
 
 const saved =
-localStorage.getItem("dogs_mining_session");
+localStorage.getItem(
+"dogs_mining_session"
+);
 
 if(saved){
 
-const end = Number(saved);
+const end =
+Number(saved);
 
 if(end > Date.now()){
 
-miningEnd = end;
+miningEnd =
+end;
+
 startTimer();
 
-}else{
+return;
+
+}
 
 localStorage.removeItem(
 "dogs_mining_session"
 );
 
-checkMining();
-
 }
-
-}else{
-
-checkMining();
-
-}
-
-}
-
-async function checkMining(){
 
 try{
 
-if(!telegramUser)return;
+await findActiveMining();
 
-const res = await fetch(
-SUPABASE_URL +
-"/rest/v1/mining_sessions?user_id=eq." +
-userData.id +
-"&claimed=eq.false&select=ends_at&order=created_at.desc&limit=1",
-{
-headers:{
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
-}
-});
+if(miningEnd){
 
-const rows = await res.json();
-
-if(rows.length){
-
-const end =
-new Date(rows[0].ends_at).getTime();
-
-if(end > Date.now()){
-
-miningEnd = end;
 saveMining();
 startTimer();
 
-}
+}else{
+
+setMiningButtons(
+"⚡ Start Mining",
+false
+);
 
 }
 
@@ -639,109 +1110,175 @@ console.error(e);
 
 }
 
+/* =========================
+TIMER
+========================= */
+
 function startTimer(){
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
+
+setMiningButtons(
+"⛏️ Mining...",
+true
+);
 
 updateTimer();
 
 timerInterval =
-setInterval(updateTimer,1000);
+setInterval(
+updateTimer,
+1000
+);
 
 }
 
 function updateTimer(){
 
-if(!miningEnd)return;
+if(!miningEnd){
+
+return;
+
+}
 
 let left =
-Math.max(0,miningEnd-Date.now());
+Math.max(
+0,
+miningEnd - Date.now()
+);
 
 if(left <= 0){
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
-document.getElementById("timer").textContent =
+document.getElementById(
+"timer"
+).textContent =
 "00:00:00";
 
-document.getElementById("timer2").textContent =
+document.getElementById(
+"timer2"
+).textContent =
 "00:00:00";
 
-setClaimButton();
+setMiningButtons(
+"🎁 Claim Mining Reward",
+false,
+true
+);
+
+document.getElementById(
+"mineMsg"
+).textContent =
+"Mining complete! Claim your reward.";
+
+document.getElementById(
+"mineMsg2"
+).textContent =
+"Mining complete! Claim your reward.";
 
 return;
 
 }
 
 const total =
-Math.floor(left/1000);
+Math.floor(
+left / 1000
+);
 
 const h =
-Math.floor(total/3600);
+Math.floor(
+total / 3600
+);
 
 const m =
-Math.floor((total%3600)/60);
+Math.floor(
+(total % 3600) / 60
+);
 
 const s =
-total%60;
+total % 60;
 
 const text =
-String(h).padStart(2,"0") + ":" +
-String(m).padStart(2,"0") + ":" +
+String(h).padStart(2,"0") +
+":" +
+String(m).padStart(2,"0") +
+":" +
 String(s).padStart(2,"0");
 
-document.getElementById("timer").textContent = text;
-document.getElementById("timer2").textContent = text;
+document.getElementById(
+"timer"
+).textContent =
+text;
+
+document.getElementById(
+"timer2"
+).textContent =
+text;
 
 }
 
-function setClaimButton(){
-
-const btn =
-document.getElementById("mineBtn");
-
-btn.disabled = false;
-btn.textContent = "🎁 Claim Mining Reward";
-
-btn.onclick = claimReward;
-
-}
+/* =========================
+CLAIM MINING
+========================= */
 
 async function claimReward(){
 
 try{
 
-const btn =
-document.getElementById("mineBtn");
+setMiningButtons(
+"Claiming...",
+true
+);
 
-btn.disabled = true;
-btn.textContent = "Claiming...";
-
-const res = await fetch(
+const res =
+await fetch(
 API + "/claim-mining",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json",
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
+"Authorization":
+"Bearer " + SUPABASE_KEY
 },
 body:JSON.stringify({
-telegramId:telegramUser.id
+telegramId:
+telegramUser.id
 })
-});
+}
+);
 
-const data = await res.json();
+const data =
+await readJson(res);
+
+console.log(
+"CLAIM:",
+data
+);
 
 if(!res.ok || !data.success){
 
 throw new Error(
-data.error || "Claim failed"
+data.error ||
+"Claim failed"
 );
 
 }
 
-balanceUpdate(data.balance);
+balanceUpdate(
+data.balance
+);
+
+if(userData){
+
+userData.balance =
+data.balance;
+}
 
 localStorage.removeItem(
 "dogs_mining_session"
@@ -749,65 +1286,121 @@ localStorage.removeItem(
 
 miningEnd = null;
 
-btn.textContent =
-"⚡ Start Mining";
+document.getElementById(
+"timer"
+).textContent =
+"04:00:00";
 
-btn.onclick = startMining;
+document.getElementById(
+"timer2"
+).textContent =
+"04:00:00";
 
-document.getElementById("mineMsg").textContent =
-"+" + data.reward + " DOGS claimed!";
+setMiningButtons(
+"⚡ Start Mining",
+false
+);
+
+document.getElementById(
+"mineMsg"
+).textContent =
+"+" +
+data.reward +
+" DOGS claimed successfully!";
+
+document.getElementById(
+"mineMsg2"
+).textContent =
+"+" +
+data.reward +
+" DOGS claimed!";
 
 }catch(e){
 
 console.error(e);
 
-document.getElementById("mineMsg").textContent =
-e.message;
+setMiningButtons(
+"🎁 Claim Mining Reward",
+false,
+true
+);
 
-document.getElementById("mineBtn").disabled = false;
+document.getElementById(
+"mineMsg"
+).textContent =
+"❌ " + e.message;
 
 }
 
 }
 
 /* =========================
-   DAILY BONUS
+DAILY BONUS
 ========================= */
 
 function renderBonus(){
 
-const streak =
-Number(userData?.daily_streak || 0);
+if(!userData)return;
 
-for(let i=1;i<=7;i++){
+const streak =
+Number(
+userData.daily_streak || 0
+);
+
+for(
+let i=1;
+i<=7;
+i++
+){
 
 const el =
-document.getElementById("d"+i);
+document.getElementById(
+"d" + i
+);
+
+el.classList.remove(
+"claimed"
+);
 
 if(i <= streak){
-el.classList.add("claimed");
-}
+
+el.classList.add(
+"claimed"
+);
 
 }
 
-if(userData?.last_daily_claim){
+}
+
+if(
+userData.last_daily_claim
+){
 
 const last =
-new Date(userData.last_daily_claim);
+new Date(
+userData.last_daily_claim
+);
 
 const now =
 new Date();
 
-if(
-last.getUTCFullYear() === now.getUTCFullYear() &&
-last.getUTCMonth() === now.getUTCMonth() &&
-last.getUTCDate() === now.getUTCDate()
-){
+const sameDay =
+last.getUTCFullYear() ===
+now.getUTCFullYear() &&
+last.getUTCMonth() ===
+now.getUTCMonth() &&
+last.getUTCDate() ===
+now.getUTCDate();
+
+if(sameDay){
 
 const btn =
-document.getElementById("bonusBtn");
+document.getElementById(
+"bonusBtn"
+);
 
 btn.disabled = true;
+
 btn.textContent =
 "✅ Claimed Today";
 
@@ -822,47 +1415,67 @@ async function claimDailyBonus(){
 try{
 
 const btn =
-document.getElementById("bonusBtn");
+document.getElementById(
+"bonusBtn"
+);
 
 btn.disabled = true;
-btn.textContent = "Claiming...";
 
-const res = await fetch(
+btn.textContent =
+"Claiming...";
+
+const res =
+await fetch(
 API + "/daily-bonus",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json",
 "apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
+"Authorization":
+"Bearer " + SUPABASE_KEY
 },
 body:JSON.stringify({
-telegramId:telegramUser.id
+telegramId:
+telegramUser.id
 })
-});
+}
+);
 
-const data = await res.json();
+const data =
+await readJson(res);
 
-if(!res.ok || !data.success){
+if(
+!res.ok ||
+!data.success
+){
 
 throw new Error(
-data.error || "Bonus failed"
+data.error ||
+"Bonus failed"
 );
 
 }
 
-balanceUpdate(data.balance);
+balanceUpdate(
+data.balance
+);
 
-userData.balance = data.balance;
-userData.daily_streak = data.streak;
+userData.balance =
+data.balance;
+
+userData.daily_streak =
+data.streak;
+
 userData.last_daily_claim =
 new Date().toISOString();
 
-document.getElementById("bonusMsg").textContent =
-"+" + data.reward + " DOGS received!";
-
-btn.textContent =
-"✅ Claimed Today";
+document.getElementById(
+"bonusMsg"
+).textContent =
+"+" +
+data.reward +
+" DOGS received!";
 
 renderBonus();
 
@@ -870,13 +1483,19 @@ renderBonus();
 
 console.error(e);
 
-document.getElementById("bonusMsg").textContent =
-e.message;
+document.getElementById(
+"bonusMsg"
+).textContent =
+"❌ " + e.message;
 
-document.getElementById("bonusBtn").disabled =
+document.getElementById(
+"bonusBtn"
+).disabled =
 false;
 
-document.getElementById("bonusBtn").textContent =
+document.getElementById(
+"bonusBtn"
+).textContent =
 "🎁 Claim Daily Bonus";
 
 }
@@ -884,7 +1503,146 @@ document.getElementById("bonusBtn").textContent =
 }
 
 /* =========================
-   REFERRAL
+TASKS
+========================= */
+
+async function loadTasks(){
+
+const box =
+document.getElementById(
+"tasksList"
+);
+
+try{
+
+const res =
+await fetch(
+SUPABASE_URL +
+"/rest/v1/tasks?select=*",
+{
+headers:{
+"apikey":SUPABASE_KEY,
+"Authorization":
+"Bearer " + SUPABASE_KEY
+}
+}
+);
+
+const tasks =
+await readJson(res);
+
+if(
+!Array.isArray(tasks) ||
+!tasks.length
+){
+
+box.innerHTML =
+'<div class="empty">No tasks available yet.</div>';
+
+return;
+
+}
+
+box.innerHTML = "";
+
+tasks.forEach(task=>{
+
+const name =
+task.title ||
+task.name ||
+"Task";
+
+const reward =
+task.reward ||
+task.reward_amount ||
+0;
+
+const link =
+task.url ||
+task.link ||
+"#";
+
+const div =
+document.createElement(
+"div"
+);
+
+div.className =
+"task";
+
+div.innerHTML = `
+<div class="task-info">
+<div class="task-name">${escapeHtml(name)}</div>
+<div class="task-reward">+${reward} DOGS</div>
+</div>
+<button onclick="openTask('${escapeAttr(link)}')">
+Open
+</button>
+`;
+
+box.appendChild(div);
+
+});
+
+}catch(e){
+
+console.error(e);
+
+box.innerHTML =
+'<div class="empty">Tasks will be available soon.</div>';
+
+}
+
+}
+
+function openTask(url){
+
+if(
+!url ||
+url === "#"
+){
+
+return;
+
+}
+
+if(
+url.startsWith("https://t.me/")
+){
+
+tg.openTelegramLink(url);
+
+}else{
+
+window.open(
+url,
+"_blank"
+);
+
+}
+
+}
+
+function escapeHtml(text){
+
+return String(text)
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
+
+}
+
+function escapeAttr(text){
+
+return String(text)
+.replaceAll("\\","\\\\")
+.replaceAll("'","\\'");
+}
+
+/* =========================
+REFERRAL
 ========================= */
 
 function loadReferral(){
@@ -892,25 +1650,34 @@ function loadReferral(){
 if(!userData)return;
 
 const count =
-Number(userData.referral_count || 0);
+Number(
+userData.referral_count || 0
+);
 
 const earnings =
-Number(userData.referral_earnings || 0);
+Number(
+userData.referral_earnings || 0
+);
 
-document.getElementById("refCount").textContent =
+document.getElementById(
+"refCount"
+).textContent =
 count;
 
-document.getElementById("refEarn").textContent =
+document.getElementById(
+"refEarn"
+).textContent =
 earnings;
 
 const code =
 userData.referral_code ||
-("DOGS" + telegramUser.id);
+"DOGS" +
+telegramUser.id;
 
-document.getElementById("refCode").textContent =
+document.getElementById(
+"refCode"
+).textContent =
 code;
-
-renderBonus();
 
 }
 
@@ -918,15 +1685,18 @@ function referralLink(){
 
 const code =
 userData?.referral_code ||
-("DOGS" + telegramUser.id);
+"DOGS" +
+telegramUser.id;
 
-/*
-Replace YOUR_BOT_USERNAME with your
-real Telegram bot username.
-*/
+const bot =
+"DOGSEarningBot";
 
-return "https://t.me/DOGSEarningBot?start=" +
-encodeURIComponent(code);
+return (
+"https://t.me/" +
+bot +
+"?start=" +
+encodeURIComponent(code)
+);
 
 }
 
@@ -934,18 +1704,21 @@ async function copyReferral(){
 
 try{
 
-const link =
-referralLink();
+await navigator.clipboard.writeText(
+referralLink()
+);
 
-await navigator.clipboard.writeText(link);
-
-document.getElementById("refMsg").textContent =
+document.getElementById(
+"refMsg"
+).textContent =
 "Referral link copied ✓";
 
 }catch(e){
 
-document.getElementById("refMsg").textContent =
-"Copy failed. Please copy manually.";
+document.getElementById(
+"refMsg"
+).textContent =
+"Copy failed.";
 
 }
 
@@ -953,11 +1726,11 @@ document.getElementById("refMsg").textContent =
 
 function shareReferral(){
 
-const link =
-referralLink();
-
 const text =
 "Join DOGS EarningBot and start earning DOGS 🐕💰";
+
+const link =
+referralLink();
 
 const share =
 "https://t.me/share/url?url=" +
@@ -965,113 +1738,19 @@ encodeURIComponent(link) +
 "&text=" +
 encodeURIComponent(text);
 
-tg.openTelegramLink(share);
+tg.openTelegramLink(
+share
+);
 
 }
 
 /* =========================
-   INCOMING REFERRAL
+INCOMING REFERRAL
 ========================= */
 
 async function handleIncomingReferral(){
 
 try{
 
-if(!tg.initDataUnsafe)return;
-
 const code =
-tg.initDataUnsafe.start_param;
-
-if(!code)return;
-
-if(
-localStorage.getItem("dogs_referral_used")
-){
-return;
-}
-
-const res = await fetch(
-API + "/referral",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
-},
-body:JSON.stringify({
-initData:tg.initData,
-referralCode:code
-})
-});
-
-const data = await res.json();
-
-if(data.success){
-
-localStorage.setItem(
-"dogs_referral_used",
-"1"
-);
-
-}
-
-console.log("Referral:",data);
-
-}catch(e){
-
-console.error(
-"Referral error:",
-e
-);
-
-}
-
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-function showPage(page){
-
-document.querySelectorAll(".page")
-.forEach(p =>
-p.classList.remove("active")
-);
-
-document.getElementById(page)
-.classList.add("active");
-
-document.querySelectorAll(".nav button")
-.forEach(b =>
-b.classList.remove("active")
-);
-
-const navMap={
-home:"navHome",
-mining:"navMining",
-referral:"navReferral",
-wallet:"navWallet"
-};
-
-document.getElementById(
-navMap[page]
-).classList.add("active");
-
-if(page==="referral"){
-loadReferral();
-}
-
-}
-
-/* sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-
-   START
-https://laiuyjthzvharbttaehy.supabase.co/rest/v1/ */
-
-connectUser();
-
-</script>
-
-</body>
-   </html>
+tg.initDataUn
