@@ -1526,33 +1526,6 @@ showMessage(
 }
 
 
-/* ---------------- START PARAMETER ---------------- */
-
-function checkStartReferral(){
-
-try{
-
-const startParam =
-tg?.initDataUnsafe?.start_param;
-
-if(
-startParam &&
-$("referralInput")
-){
-
-$("referralInput").value =
-startParam;
-
-}
-
-}catch(e){
-
-console.log(e);
-
-}
-
-}
-
 
 /* ---------------- START APP ---------------- */
 
