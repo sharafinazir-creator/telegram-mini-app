@@ -819,11 +819,99 @@ showMessage(
    CLAIM
 ========================= */
 
-function claimReward(){
+async function claimReward(){
+
+if(!currentUser){
+
+showMessage("Please wait...");
+
+return;
+}
+
+const button =
+document.getElementById("mineButton");
+
+button.disabled = true;
+
+showMessage("Claiming reward...");
+
+try{
+
+const response = await fetch(
+SUPABASE_URL +
+"/functions/v1/claim-mining",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY,
+"Authorization":"Bearer " + SUPABASE_KEY
+},
+
+body:JSON.stringify({
+telegramId:telegramUser.id
+})
+}
+);
+
+const data = await response.json();
+
+console.log("claim-mining:",data);
+
+if(!response.ok || !data.success){
+
+throw new Error(
+data.error || "Claim failed"
+);
+
+}
+
+currentSession = null;
+
+localStorage.removeItem(
+"dogs_mining_session"
+);
+
+currentUser.balance =
+data.balance;
+
+updateUI();
+
+document.getElementById(
+"miningStatus"
+).textContent =
+"Ready to mine";
+
+document.getElementById(
+"timer"
+).textContent =
+"04:00:00";
+
+button.textContent =
+"🚀 Start Mining";
+
+button.onclick =
+startMining;
 
 showMessage(
-"Claim system will be connected next."
+"🎉 +" +
+Number(data.reward).toLocaleString() +
+" DOGS claimed!"
 );
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Claim error: " +
+error.message
+);
+
+button.disabled = false;
+
+}
 
 }
 
