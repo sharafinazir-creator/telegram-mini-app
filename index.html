@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>DOGS EarningBot</title>
-
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
@@ -12,130 +11,135 @@
 
 body{
 margin:0;
-background:#0b0b0f;
+background:#080808;
 color:#fff;
-font-family:Arial,sans-serif
+font-family:Arial,sans-serif;
 }
 
 .app{
-max-width:480px;
+max-width:520px;
 margin:auto;
-padding:20px 20px 90px
+min-height:100vh;
+padding:18px 14px 90px;
 }
 
 .header{
 display:flex;
 align-items:center;
 gap:12px;
-margin-bottom:20px
+margin-bottom:16px;
 }
 
-.dog{
-width:55px;
-height:55px;
-background:#d6a84f;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:32px
-}
+.dog{font-size:42px}
 
-h1{
-margin:0;
-font-size:22px
+.title{
+font-size:24px;
+font-weight:800;
 }
 
 .sub{
 color:#999;
-font-size:13px;
-margin-top:4px
+font-size:12px;
 }
 
 .card{
-background:#15151c;
-border:1px solid #282832;
+background:#121212;
+border:1px solid #292929;
 border-radius:18px;
-padding:20px;
-margin-bottom:15px
+padding:18px;
+margin:12px 0;
 }
 
-.balance{text-align:center}
+.gold{color:#f5c542}
 
-.balance-title{
-color:#999;
-font-size:13px
-}
-
-.balance-number{
+.balance{
 font-size:34px;
-font-weight:bold;
-color:#e2b85c;
-margin:8px 0
+font-weight:800;
+margin:6px 0;
 }
 
-.coin{
-color:#aaa;
-font-size:15px
+.row{
+display:flex;
+justify-content:space-between;
+gap:10px;
+align-items:center;
 }
 
-.user{
-color:#ddd;
-font-size:14px
-}
+.muted{color:#999}
 
-.level{
-color:#e2b85c;
-font-weight:bold;
-margin-top:6px
-}
-
-.mining-box{text-align:center}
-
-.mining-status{
-font-size:17px;
-margin-bottom:10px
-}
-
-.speed{
-color:#aaa;
-font-size:13px;
-margin-bottom:15px
-}
-
-.timer{
-color:#e2b85c;
-font-size:25px;
-font-weight:bold;
-margin:15px 0
-}
+.small{font-size:12px}
 
 button{
 width:100%;
 border:0;
+border-radius:14px;
+padding:15px;
+font-size:16px;
+font-weight:800;
+cursor:pointer;
+background:#f5c542;
+color:#080808;
+margin-top:12px;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.secondary{
+background:#202020;
+color:#fff;
+}
+
+.stat{
+background:#0d0d0d;
 border-radius:12px;
-padding:14px;
-font-size:15px;
-font-weight:bold;
-cursor:pointer
+padding:12px;
+flex:1;
 }
 
-.gold-btn{
-background:#d6a84f;
-color:#111
+.stats{
+display:flex;
+gap:8px;
+margin-top:12px;
 }
 
-.gold-btn:disabled{
-background:#555;
-color:#aaa
+.timer{
+font-size:31px;
+font-weight:800;
+text-align:center;
+margin:10px 0;
 }
 
-.message{
+.status{
 text-align:center;
 color:#aaa;
 font-size:13px;
-min-height:20px;
-margin-top:10px
+}
+
+.bonus{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:7px;
+margin-top:14px;
+}
+
+.day{
+background:#0d0d0d;
+border:1px solid #292929;
+border-radius:12px;
+padding:10px 4px;
+text-align:center;
+font-size:12px;
+}
+
+.day.active{
+border-color:#f5c542;
+}
+
+.day.claimed{
+opacity:.45;
 }
 
 .nav{
@@ -143,21 +147,46 @@ position:fixed;
 bottom:0;
 left:0;
 right:0;
-background:#111116;
-border-top:1px solid #292933;
+background:#101010;
+border-top:1px solid #292929;
 display:flex;
-justify-content:space-around;
-padding:12px 5px
+justify-content:center;
+z-index:5;
 }
 
-.nav div{
+.nav-inner{
+max-width:520px;
+width:100%;
+display:flex;
+}
+
+.nav button{
+margin:0;
+background:transparent;
 color:#888;
+border-radius:0;
+padding:12px 5px;
 font-size:11px;
-text-align:center
 }
 
-.nav .active{
-color:#e2b85c
+.nav button.active{
+color:#f5c542;
+}
+
+.page{
+display:none;
+}
+
+.page.active{
+display:block;
+}
+
+.message{
+min-height:20px;
+text-align:center;
+color:#f5c542;
+font-size:13px;
+margin:10px 0;
 }
 </style>
 </head>
@@ -168,107 +197,330 @@ color:#e2b85c
 
 <div class="header">
 <div class="dog">🐕</div>
+
 <div>
-<h1>DOGS EarningBot</h1>
-<div class="sub">Mine DOGS • Earn • Grow</div>
+<div class="title">DOGS EarningBot</div>
+<div class="sub">Mine • Earn • Grow</div>
 </div>
 </div>
 
-<div class="card balance">
-<div class="balance-title">Your Balance</div>
-<div class="balance-number" id="balance">0</div>
-<div class="coin">DOGS</div>
-</div>
+
+<!-- HOME -->
+
+<div id="home" class="page active">
 
 <div class="card">
-<div class="user">
-Welcome, <strong id="username">User</strong>
+
+<div class="small muted">
+Your DOGS Balance
 </div>
 
-<div class="level" id="level">
-🥉 Free Miner
-</div>
+<div id="balance" class="balance">
+0 DOGS
 </div>
 
-<div class="card mining-box">
+<div class="row small">
 
-<div class="mining-status" id="miningStatus">
+<span id="username">
+@user
+</span>
+
+<span id="level">
+Level 0
+</span>
+
+</div>
+
+</div>
+
+
+<!-- MINING -->
+
+<div class="card">
+
+<div class="row">
+
+<b>⛏️ Mining</b>
+
+<span id="miningStatus" class="gold">
 Ready to mine
+</span>
+
 </div>
 
-<div class="speed">
-Mining speed:
-<strong id="speed">5 DOGS/hour</strong>
+<div class="stats">
+
+<div class="stat">
+
+<div class="small muted">
+Speed
 </div>
 
-<div class="timer" id="timer">
+<b id="speed">
+5 DOGS/h
+</b>
+
+</div>
+
+<div class="stat">
+
+<div class="small muted">
+Cycle
+</div>
+
+<b>
+4 hours
+</b>
+
+</div>
+
+</div>
+
+<div id="timer" class="timer">
 04:00:00
 </div>
 
-<button
-class="gold-btn"
-id="mineButton"
-onclick="startMining()">
+<button id="mineButton" onclick="startMining()">
 🚀 Start Mining
 </button>
 
-<div class="message" id="message"></div>
+</div>
+
+
+<!-- DAILY BONUS -->
+
+<div class="card">
+
+<div class="row">
+
+<b>🎁 Daily Bonus</b>
+
+<span id="streakLabel" class="gold">
+Day 1
+</span>
+
+</div>
+
+<div id="bonusDays" class="bonus">
+</div>
+
+<button id="bonusButton" onclick="claimDailyBonus()">
+🎁 Claim Daily Bonus
+</button>
+
+</div>
+
+
+<div id="message" class="message"></div>
+
+</div>
+
+
+<!-- MINING PAGE -->
+
+<div id="mining" class="page">
+
+<div class="card">
+
+<h3>
+⛏️ Mining
+</h3>
+
+<p class="muted small">
+Start a 4-hour mining cycle. Your reward is calculated from your current mining speed.
+</p>
+
+<div id="miningTimer2" class="timer">
+04:00:00
+</div>
+
+<button id="mineButton2" onclick="startMining()">
+🚀 Start Mining
+</button>
 
 </div>
 
 </div>
+
+
+<!-- TASKS -->
+
+<div id="tasks" class="page">
+
+<div class="card">
+
+<h3>
+🎯 Tasks
+</h3>
+
+<p class="muted">
+Tasks and ads will be added next.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- REFERRAL -->
+
+<div id="referral" class="page">
+
+<div class="card">
+
+<h3>
+👥 Referral
+</h3>
+
+<p class="muted">
+Referral system will be connected next.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- WALLET -->
+
+<div id="wallet" class="page">
+
+<div class="card">
+
+<h3>
+💰 Wallet
+</h3>
+
+<div class="balance" id="walletBalance">
+0 DOGS
+</div>
+
+<p class="muted">
+Deposits and withdrawals will be connected later.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- NAVIGATION -->
 
 <div class="nav">
-<div class="active">🏠<br>Home</div>
-<div>⛏️<br>Mining</div>
-<div>🎯<br>Tasks</div>
-<div>👥<br>Referral</div>
-<div>💼<br>Wallet</div>
+
+<div class="nav-inner">
+
+<button class="active" data-page="home">
+🏠<br>Home
+</button>
+
+<button data-page="mining">
+⛏️<br>Mining
+</button>
+
+<button data-page="tasks">
+🎯<br>Tasks
+</button>
+
+<button data-page="referral">
+👥<br>Referral
+</button>
+
+<button data-page="wallet">
+💰<br>Wallet
+</button>
+
 </div>
+
+</div>
+
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
-
 const SUPABASE_URL =
 "https://laiuyjthzvharbttaehy.supabase.co";
-
-/*
-  IMPORTANT:
-  Put your own Supabase PUBLISHABLE KEY here.
-  Do NOT put the Secret / Service Role key here.
-*/
 
 const SUPABASE_KEY =
 "sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-";
 
 
-/* =========================
-   TELEGRAM
-========================= */
+const tg =
+window.Telegram &&
+window.Telegram.WebApp;
 
-const tg = window.Telegram.WebApp;
+if(tg){
 
 tg.ready();
 tg.expand();
 
-const telegramUser = tg.initDataUnsafe?.user;
+}
 
 
-/* =========================
-   VARIABLES
-========================= */
+let telegramUser =
+tg?.initDataUnsafe?.user || null;
 
 let currentUser = null;
+
 let currentSession = null;
+
 let timerInterval = null;
 
 
-/* =========================
-   CONNECT USER
-========================= */
+const $ = id =>
+document.getElementById(id);
+
+
+function showMessage(text){
+
+$("message").textContent =
+text || "";
+
+}
+
+
+function money(n){
+
+return Number(n || 0)
+.toLocaleString() + " DOGS";
+
+}
+
+
+function updateUI(){
+
+if(!currentUser)
+return;
+
+
+$("balance").textContent =
+money(currentUser.balance);
+
+
+$("walletBalance").textContent =
+money(currentUser.balance);
+
+
+$("username").textContent =
+currentUser.username
+? "@" + currentUser.username
+: (currentUser.first_name || "User");
+
+
+$("level").textContent =
+"Level " + Number(currentUser.level || 0);
+
+
+$("speed").textContent =
+Number(currentUser.mining_speed || 5)
++ " DOGS/h";
+
+
+renderBonus();
+
+}
+
 
 async function connectUser(){
 
@@ -279,16 +531,21 @@ showMessage(
 );
 
 return;
+
 }
+
 
 try{
 
 showMessage("Connecting...");
 
-const response = await fetch(
+
+const response =
+await fetch(
 SUPABASE_URL +
 "/functions/v1/telegram-user-v2",
 {
+
 method:"POST",
 
 headers:{
@@ -299,42 +556,47 @@ headers:{
 body:JSON.stringify({
 initData:tg.initData
 })
+
 }
 );
 
-const data = await response.json();
 
-console.log("telegram-user-v2:",data);
+const data =
+await response.json();
+
 
 if(!response.ok){
 
-showMessage(
-"Server error: " +
-(data.error || response.status)
+throw new Error(
+data.error ||
+"Connection failed"
 );
 
-return;
 }
+
 
 if(!data.user){
 
-showMessage("User data not received.");
+throw new Error(
+"User data not received"
+);
 
-return;
 }
 
-currentUser = data.user;
+
+currentUser =
+data.user;
+
 
 updateUI();
 
-showMessage("Connected ✓");
+showMessage(
+"Connected ✓"
+);
 
-/*
-  First try the saved local mining session.
-  This allows the timer to survive reopening Telegram.
-*/
 
 restoreSavedMining();
+
 
 if(!currentSession){
 
@@ -342,13 +604,12 @@ await checkMining();
 
 }
 
-}catch(error){
 
-console.error(error);
+}catch(e){
 
 showMessage(
 "Connection error: " +
-error.message
+e.message
 );
 
 }
@@ -356,83 +617,19 @@ error.message
 }
 
 
-/* =========================
-   UPDATE UI
-========================= */
-
-function updateUI(){
-
-if(!currentUser)return;
-
-document.getElementById("username")
-.textContent =
-currentUser.first_name || "User";
-
-document.getElementById("balance")
-.textContent =
-Number(
-currentUser.balance || 0
-).toLocaleString();
-
-document.getElementById("speed")
-.textContent =
-Number(
-currentUser.mining_speed || 5
-) +
-" DOGS/hour";
-
-const level =
-Number(currentUser.level || 0);
-
-const names=[
-"🥉 Free Miner",
-"🥈 Bronze",
-"🥇 Silver",
-"🏆 Gold",
-"💎 Platinum",
-"💎 Diamond",
-"👑 Master",
-"⚡ Elite",
-"👑 Royal",
-"🔥 Legend",
-"🚀 Ultimate"
-];
-
-document.getElementById("level")
-.textContent =
-names[level] ||
-"🥉 Free Miner";
-
-}
-
-
-/* =========================
-   SAVE MINING SESSION
-========================= */
-
 function saveMining(){
 
-if(!currentSession)return;
-
-try{
+if(currentSession){
 
 localStorage.setItem(
 "dogs_mining_session",
 JSON.stringify(currentSession)
 );
 
-}catch(error){
-
-console.log("Save mining error:",error);
-
 }
 
 }
 
-
-/* =========================
-   RESTORE MINING SESSION
-========================= */
 
 function restoreSavedMining(){
 
@@ -443,192 +640,49 @@ localStorage.getItem(
 "dogs_mining_session"
 );
 
-if(!saved)return;
 
-const session =
+if(saved){
+
+const s =
 JSON.parse(saved);
 
-if(!session || !session.ends_at){
+
+if(
+s.ends_at &&
+new Date(s.ends_at) > new Date()
+){
+
+currentSession = s;
+
+startTimer();
+
+return;
+
+}
+
 
 localStorage.removeItem(
 "dogs_mining_session"
 );
 
-return;
 }
 
-const end =
-new Date(session.ends_at).getTime();
-
-if(end <= Date.now()){
+}catch(e){
 
 localStorage.removeItem(
 "dogs_mining_session"
 );
 
-return;
-}
-
-currentSession = session;
-
-const button =
-document.getElementById("mineButton");
-
-button.disabled = true;
-
-startTimer();
-
-showMessage(
-"Mining restored ✓"
-);
-
-}catch(error){
-
-console.log(
-"Restore mining error:",
-error
-);
-
 }
 
 }
 
-
-/* =========================
-   START MINING
-========================= */
-
-async function startMining(){
-
-if(!currentUser){
-
-showMessage("Please wait...");
-
-return;
-}
-
-const button =
-document.getElementById("mineButton");
-
-button.disabled = true;
-
-showMessage(
-"Starting mining..."
-);
-
-try{
-
-const response = await fetch(
-SUPABASE_URL +
-"/functions/v1/start-mining",
-{
-method:"POST",
-
-headers:{
-"Content-Type":"application/json",
-"apikey":SUPABASE_KEY
-},
-
-body:JSON.stringify({
-initData:tg.initData
-})
-}
-);
-
-const data = await response.json();
-
-console.log(
-"start-mining:",
-data
-);
-
-
-/*
-  IMPORTANT:
-  If server says mining is already active,
-  this is NOT an error.
-*/
-
-if(
-data.session &&
-data.success === false
-){
-
-currentSession =
-data.session;
-
-saveMining();
-
-startTimer();
-
-button.disabled = true;
-
-showMessage(
-"Mining is already active ✓"
-);
-
-return;
-}
-
-
-/*
-  Normal successful start
-*/
-
-if(
-response.ok &&
-data.success &&
-data.session
-){
-
-currentSession =
-data.session;
-
-saveMining();
-
-showMessage(
-"Mining started successfully! ✓"
-);
-
-startTimer();
-
-return;
-}
-
-
-/*
-  Real error
-*/
-
-throw new Error(
-data.error ||
-data.message ||
-"Mining failed"
-);
-
-}catch(error){
-
-console.error(error);
-
-showMessage(
-"Mining error: " +
-error.message
-);
-
-button.disabled = false;
-
-}
-
-}
-
-
-/* =========================
-   CHECK MINING FROM SERVER
-========================= */
 
 async function checkMining(){
 
-if(!currentUser)return;
+if(!currentUser)
+return;
+
 
 try{
 
@@ -646,6 +700,7 @@ new Date().toISOString()
 "&order=created_at.desc" +
 "&limit=1";
 
+
 const response =
 await fetch(
 url,
@@ -656,29 +711,21 @@ headers:{
 }
 );
 
-if(!response.ok){
 
-console.log(
-"Mining check failed:",
-response.status
-);
-
+if(!response.ok)
 return;
-}
+
 
 const sessions =
 await response.json();
 
-if(sessions.length > 0){
+
+if(sessions.length){
 
 currentSession =
 sessions[0];
 
 saveMining();
-
-document.getElementById(
-"mineButton"
-).disabled = true;
 
 startTimer();
 
@@ -688,11 +735,131 @@ showMessage(
 
 }
 
-}catch(error){
+}catch(e){
 
-console.error(
-"Check mining error:",
-error
+console.log(e);
+
+}
+
+}
+
+
+async function startMining(){
+
+if(!currentUser){
+
+showMessage(
+"Please wait..."
+);
+
+return;
+
+}
+
+
+const buttons = [
+$("mineButton"),
+$("mineButton2")
+];
+
+
+buttons.forEach(
+b=>{
+if(b)b.disabled=true;
+}
+);
+
+
+showMessage(
+"Starting mining..."
+);
+
+
+try{
+
+const response =
+await fetch(
+SUPABASE_URL +
+"/functions/v1/start-mining",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY
+},
+
+body:JSON.stringify({
+initData:tg.initData
+})
+
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(
+data.session &&
+data.success === false
+){
+
+currentSession =
+data.session;
+
+saveMining();
+
+startTimer();
+
+showMessage(
+"Mining is already active ✓"
+);
+
+return;
+
+}
+
+
+if(
+!response.ok ||
+!data.success
+){
+
+throw new Error(
+data.error ||
+"Mining failed"
+);
+
+}
+
+
+currentSession =
+data.session;
+
+saveMining();
+
+startTimer();
+
+showMessage(
+"Mining started successfully! ✓"
+);
+
+
+}catch(e){
+
+showMessage(
+"Mining error: " +
+e.message
+);
+
+
+buttons.forEach(
+b=>{
+if(b)b.disabled=false;
+}
 );
 
 }
@@ -700,17 +867,114 @@ error
 }
 
 
-/* =========================
-   TIMER
-========================= */
+function updateTimer(){
+
+if(!currentSession)
+return;
+
+
+const remaining =
+Math.max(
+0,
+new Date(currentSession.ends_at)
+-
+new Date()
+);
+
+
+const total =
+Math.floor(
+remaining / 1000
+);
+
+
+const h =
+String(
+Math.floor(total / 3600)
+).padStart(2,"0");
+
+
+const m =
+String(
+Math.floor((total % 3600) / 60)
+).padStart(2,"0");
+
+
+const s =
+String(
+total % 60
+).padStart(2,"0");
+
+
+$("timer").textContent =
+`${h}:${m}:${s}`;
+
+
+$("miningTimer2").textContent =
+`${h}:${m}:${s}`;
+
+
+$("miningStatus").textContent =
+remaining > 0
+? "Mining active"
+: "Ready to claim";
+
+
+if(remaining <= 0){
+
+clearInterval(
+timerInterval
+);
+
+
+$("mineButton").disabled=false;
+
+$("mineButton").textContent =
+"💰 Claim Reward";
+
+$("mineButton").onclick =
+claimReward;
+
+
+$("mineButton2").disabled=false;
+
+$("mineButton2").textContent =
+"💰 Claim Reward";
+
+$("mineButton2").onclick =
+claimReward;
+
+
+showMessage(
+"Your mining cycle is complete."
+);
+
+}
+
+}
+
 
 function startTimer(){
 
-if(!currentSession)return;
+clearInterval(
+timerInterval
+);
 
-clearInterval(timerInterval);
+
+$("mineButton").disabled=true;
+
+$("mineButton2").disabled=true;
+
+
+$("mineButton").textContent =
+"⛏️ Mining...";
+
+$("mineButton2").textContent =
+"⛏️ Mining...";
+
 
 updateTimer();
+
 
 timerInterval =
 setInterval(
@@ -721,217 +985,406 @@ updateTimer,
 }
 
 
-/* =========================
-   UPDATE TIMER
-========================= */
-
-function updateTimer(){
-
-if(!currentSession)return;
-
-const end =
-new Date(
-currentSession.ends_at
-).getTime();
-
-const remaining =
-Math.max(
-0,
-end - Date.now()
-);
-
-const totalSeconds =
-Math.floor(
-remaining / 1000
-);
-
-const hours =
-Math.floor(
-totalSeconds / 3600
-);
-
-const minutes =
-Math.floor(
-(totalSeconds % 3600) / 60
-);
-
-const seconds =
-totalSeconds % 60;
-
-document.getElementById(
-"timer"
-).textContent =
-String(hours).padStart(2,"0") +
-":" +
-String(minutes).padStart(2,"0") +
-":" +
-String(seconds).padStart(2,"0");
-
-
-/*
-  Mining is active
-*/
-
-if(remaining > 0){
-
-document.getElementById(
-"miningStatus"
-).textContent =
-"⛏️ Mining in progress";
-
-return;
-
-}
-
-
-/*
-  Mining completed
-*/
-
-clearInterval(timerInterval);
-
-document.getElementById(
-"miningStatus"
-).textContent =
-"🎉 Mining complete";
-
-const button =
-document.getElementById(
-"mineButton"
-);
-
-button.disabled = false;
-
-button.textContent =
-"💰 Claim Reward";
-
-button.onclick =
-claimReward;
-
-showMessage(
-"Your mining cycle is complete."
-);
-
-}
-
-
-/* =========================
-   CLAIM
-========================= */
-
 async function claimReward(){
 
-if(!currentUser){
-
-showMessage("Please wait...");
-
+if(!currentUser)
 return;
-}
 
-const button =
-document.getElementById("mineButton");
 
-button.disabled = true;
+$("mineButton").disabled=true;
 
-showMessage("Claiming reward...");
+$("mineButton2").disabled=true;
+
+
+showMessage(
+"Claiming reward..."
+);
+
 
 try{
 
-const response = await fetch(
+const response =
+await fetch(
 SUPABASE_URL +
 "/functions/v1/claim-mining",
 {
+
 method:"POST",
 
 headers:{
-"Content-Type":"application/json",
-"apikey":SUPABASE_KEY,
-"Authorization":"Bearer " + SUPABASE_KEY
+
+"Content-Type":
+"application/json",
+
+"apikey":
+SUPABASE_KEY,
+
+"Authorization":
+"Bearer " + SUPABASE_KEY
+
 },
 
 body:JSON.stringify({
-telegramId:telegramUser.id
+telegramId:
+telegramUser.id
 })
+
 }
 );
 
-const data = await response.json();
 
-console.log("claim-mining:",data);
+const data =
+await response.json();
 
-if(!response.ok || !data.success){
+
+if(
+!response.ok ||
+!data.success
+){
 
 throw new Error(
-data.error || "Claim failed"
+data.error ||
+"Claim failed"
 );
 
 }
 
-currentSession = null;
+
+currentSession =
+null;
+
 
 localStorage.removeItem(
 "dogs_mining_session"
 );
 
+
 currentUser.balance =
 data.balance;
 
+
 updateUI();
 
-document.getElementById(
-"miningStatus"
-).textContent =
+
+$("miningStatus").textContent =
 "Ready to mine";
 
-document.getElementById(
-"timer"
-).textContent =
+
+$("timer").textContent =
 "04:00:00";
 
-button.textContent =
+
+$("miningTimer2").textContent =
+"04:00:00";
+
+
+$("mineButton").textContent =
 "🚀 Start Mining";
 
-button.onclick =
+$("mineButton").onclick =
 startMining;
+
+
+$("mineButton2").textContent =
+"🚀 Start Mining";
+
+$("mineButton2").onclick =
+startMining;
+
 
 showMessage(
 "🎉 +" +
-Number(data.reward).toLocaleString() +
+Number(data.reward)
+.toLocaleString() +
 " DOGS claimed!"
 );
 
-}catch(error){
 
-console.error(error);
+}catch(e){
 
 showMessage(
 "Claim error: " +
-error.message
+e.message
 );
 
-button.disabled = false;
+
+$("mineButton").disabled=false;
+
+$("mineButton2").disabled=false;
 
 }
 
 }
 
 
-/* =========================
-   MESSAGE
-========================= */
+function renderBonus(){
 
-function showMessage(text){
+if(!currentUser)
+return;
 
-document.getElementById(
-"message"
-).textContent = text;
+
+const streak =
+Math.max(
+1,
+Math.min(
+7,
+Number(currentUser.daily_streak || 0) + 1
+)
+);
+
+
+$("streakLabel").textContent =
+"Day " + streak;
+
+
+const last =
+currentUser.last_daily_claim
+? new Date(
+currentUser.last_daily_claim
+)
+: null;
+
+
+const now =
+new Date();
+
+
+const claimedToday =
+last &&
+last.getUTCFullYear() ===
+now.getUTCFullYear() &&
+
+last.getUTCMonth() ===
+now.getUTCMonth() &&
+
+last.getUTCDate() ===
+now.getUTCDate();
+
+
+let html = "";
+
+
+for(
+let i=1;
+i<=7;
+i++
+){
+
+const reward =
+20 + (i-1) * 10;
+
+
+let cls = "";
+
+
+if(
+i <=
+Number(
+currentUser.daily_streak || 0
+)
+){
+
+cls = "claimed";
 
 }
 
 
-/* https://laiuyjthzvharbttaehy.supabase.co/rest/v1/
-   START APP
-sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4- */
+if(
+i === streak &&
+!claimedToday
+){
+
+cls = "active";
+
+}
+
+
+html +=
+
+`<div class="day ${cls}">
+<b>Day ${i}</b>
+<br>
+<span class="gold">
+${reward}
+</span>
+</div>`;
+
+}
+
+
+$("bonusDays").innerHTML =
+html;
+
+
+$("bonusButton").disabled =
+!!claimedToday;
+
+
+$("bonusButton").textContent =
+claimedToday
+? "✅ Claimed Today"
+: "🎁 Claim " +
+(20 + (streak-1)*10) +
+" DOGS";
+
+}
+
+
+async function claimDailyBonus(){
+
+if(!currentUser)
+return;
+
+
+$("bonusButton").disabled =
+true;
+
+
+showMessage(
+"Claiming daily bonus..."
+);
+
+
+try{
+
+const response =
+await fetch(
+SUPABASE_URL +
+"/functions/v1/daily-bonus",
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":
+"application/json",
+
+"apikey":
+SUPABASE_KEY,
+
+"Authorization":
+"Bearer " + SUPABASE_KEY
+
+},
+
+body:JSON.stringify({
+telegramId:
+telegramUser.id
+})
+
+}
+);
+
+
+const data =
+await response.json();
+
+
+if(
+!response.ok ||
+!data.success
+){
+
+throw new Error(
+data.error ||
+"Bonus claim failed"
+);
+
+}
+
+
+currentUser.balance =
+data.balance;
+
+
+currentUser.daily_streak =
+data.streak;
+
+
+currentUser.last_daily_claim =
+new Date().toISOString();
+
+
+updateUI();
+
+
+showMessage(
+"🎉 Day " +
+data.streak +
+": +" +
+Number(data.reward)
+.toLocaleString() +
+" DOGS!"
+);
+
+
+}catch(e){
+
+showMessage(
+"Daily Bonus: " +
+e.message
+);
+
+
+renderBonus();
+
+}
+
+}
+
+
+document
+.querySelectorAll(
+".nav button"
+)
+.forEach(
+btn=>{
+
+btn.addEventListener(
+"click",
+()=>{
+
+document
+.querySelectorAll(
+".nav button"
+)
+.forEach(
+x=>
+x.classList.remove(
+"active"
+)
+);
+
+
+document
+.querySelectorAll(
+".page"
+)
+.forEach(
+x=>
+x.classList.remove(
+"active"
+)
+);
+
+
+btn.classList.add(
+"active"
+);
+
+
+$(btn.dataset.page)
+.classList.add(
+"active"
+);
+
+}
+);
+
+}
+);
+
 
 connectUser();
 
