@@ -228,11 +228,26 @@ onclick="startMining()">
 
 <script>
 
+/* =========================
+   SUPABASE
+========================= */
+
 const SUPABASE_URL =
 "https://laiuyjthzvharbttaehy.supabase.co";
 
+/*
+  IMPORTANT:
+  Put your own Supabase PUBLISHABLE KEY here.
+  Do NOT put the Secret / Service Role key here.
+*/
+
 const SUPABASE_KEY =
-"sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-";
+"YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+
+/* =========================
+   TELEGRAM
+========================= */
 
 const tg = window.Telegram.WebApp;
 
@@ -240,6 +255,11 @@ tg.ready();
 tg.expand();
 
 const telegramUser = tg.initDataUnsafe?.user;
+
+
+/* =========================
+   VARIABLES
+========================= */
 
 let currentUser = null;
 let currentSession = null;
@@ -309,7 +329,18 @@ updateUI();
 
 showMessage("Connected ✓");
 
+/*
+  First try the saved local mining session.
+  This allows the timer to survive reopening Telegram.
+*/
+
+restoreSavedMining();
+
+if(!currentSession){
+
 await checkMining();
+
+}
 
 }catch(error){
 
@@ -376,6 +407,94 @@ names[level] ||
 
 
 /* =========================
+   SAVE MINING SESSION
+========================= */
+
+function saveMining(){
+
+if(!currentSession)return;
+
+try{
+
+localStorage.setItem(
+"dogs_mining_session",
+JSON.stringify(currentSession)
+);
+
+}catch(error){
+
+console.log("Save mining error:",error);
+
+}
+
+}
+
+
+/* =========================
+   RESTORE MINING SESSION
+========================= */
+
+function restoreSavedMining(){
+
+try{
+
+const saved =
+localStorage.getItem(
+"dogs_mining_session"
+);
+
+if(!saved)return;
+
+const session =
+JSON.parse(saved);
+
+if(!session || !session.ends_at){
+
+localStorage.removeItem(
+"dogs_mining_session"
+);
+
+return;
+}
+
+const end =
+new Date(session.ends_at).getTime();
+
+if(end <= Date.now()){
+
+localStorage.removeItem(
+"dogs_mining_session"
+);
+
+return;
+}
+
+currentSession = session;
+
+const button =
+document.getElementById("mineButton");
+
+button.disabled = true;
+
+startTimer();
+
+showMessage(
+"Mining restored ✓"
+);
+
+}catch(error){
+
+console.log(
+"Restore mining error:",
+error
+);
+
+}
+
+}
+
+
+/* =========================
    START MINING
 ========================= */
 
@@ -391,14 +510,16 @@ return;
 const button =
 document.getElementById("mineButton");
 
-button.disabled=true;
+button.disabled = true;
 
-showMessage("Starting mining...");
+showMessage(
+"Starting mining..."
+);
 
 try{
 
-const response=await fetch(
-SUPABASE_URL+
+const response = await fetch(
+SUPABASE_URL +
 "/functions/v1/start-mining",
 {
 method:"POST",
@@ -414,54 +535,87 @@ initData:tg.initData
 }
 );
 
-const data=await response.json();
+const data = await response.json();
 
-console.log("start-mining:",data);
-
-if(!response.ok){
-
-throw new Error(
-data.error ||
-"Mining failed"
+console.log(
+"start-mining:",
+data
 );
 
-}
 
-if(!data.success){
+/*
+  IMPORTANT:
+  If server says mining is already active,
+  this is NOT an error.
+*/
 
-showMessage(
-data.message ||
-"Mining is already active."
-);
+if(
+data.session &&
+data.success === false
+){
 
-if(data.session){
+currentSession =
+data.session;
 
-currentSession=data.session;
+saveMining();
+
 startTimer();
 
-}
+button.disabled = true;
+
+showMessage(
+"Mining is already active ✓"
+);
 
 return;
 }
 
-currentSession=data.session;
+
+/*
+  Normal successful start
+*/
+
+if(
+response.ok &&
+data.success &&
+data.session
+){
+
+currentSession =
+data.session;
+
+saveMining();
 
 showMessage(
-"Mining started successfully!"
+"Mining started successfully! ✓"
 );
 
 startTimer();
+
+return;
+}
+
+
+/*
+  Real error
+*/
+
+throw new Error(
+data.error ||
+data.message ||
+"Mining failed"
+);
 
 }catch(error){
 
 console.error(error);
 
 showMessage(
-"Mining error: "+
+"Mining error: " +
 error.message
 );
 
-button.disabled=false;
+button.disabled = false;
 
 }
 
@@ -469,7 +623,7 @@ button.disabled=false;
 
 
 /* =========================
-   CHECK MINING
+   CHECK MINING FROM SERVER
 ========================= */
 
 async function checkMining(){
@@ -479,20 +633,21 @@ if(!currentUser)return;
 try{
 
 const url =
-SUPABASE_URL+
-"/rest/v1/mining_sessions"+
-"?select=*"+
-"&user_id=eq."+
-currentUser.id+
-"&claimed=eq.false"+
-"&ends_at=gt."+
+SUPABASE_URL +
+"/rest/v1/mining_sessions" +
+"?select=*" +
+"&user_id=eq." +
+currentUser.id +
+"&claimed=eq.false" +
+"&ends_at=gt." +
 encodeURIComponent(
 new Date().toISOString()
-)+
-"&order=created_at.desc"+
+) +
+"&order=created_at.desc" +
 "&limit=1";
 
-const response=await fetch(
+const response =
+await fetch(
 url,
 {
 headers:{
@@ -501,26 +656,44 @@ headers:{
 }
 );
 
-if(!response.ok)return;
+if(!response.ok){
 
-const sessions=
+console.log(
+"Mining check failed:",
+response.status
+);
+
+return;
+}
+
+const sessions =
 await response.json();
 
-if(sessions.length>0){
+if(sessions.length > 0){
 
-currentSession=sessions[0];
+currentSession =
+sessions[0];
+
+saveMining();
 
 document.getElementById(
 "mineButton"
-).disabled=true;
+).disabled = true;
 
 startTimer();
+
+showMessage(
+"Mining restored ✓"
+);
 
 }
 
 }catch(error){
 
-console.error(error);
+console.error(
+"Check mining error:",
+error
+);
 
 }
 
@@ -537,7 +710,24 @@ if(!currentSession)return;
 
 clearInterval(timerInterval);
 
-timerInterval=setInterval(()=>{
+updateTimer();
+
+timerInterval =
+setInterval(
+updateTimer,
+1000
+);
+
+}
+
+
+/* =========================
+   UPDATE TIMER
+========================= */
+
+function updateTimer(){
+
+if(!currentSession)return;
 
 const end =
 new Date(
@@ -547,70 +737,80 @@ currentSession.ends_at
 const remaining =
 Math.max(
 0,
-end-Date.now()
+end - Date.now()
 );
 
 const totalSeconds =
 Math.floor(
-remaining/1000
+remaining / 1000
 );
 
 const hours =
 Math.floor(
-totalSeconds/3600
+totalSeconds / 3600
 );
 
 const minutes =
 Math.floor(
-(totalSeconds%3600)/60
+(totalSeconds % 3600) / 60
 );
 
 const seconds =
-totalSeconds%60;
+totalSeconds % 60;
 
 document.getElementById(
 "timer"
-).textContent=
-
-String(hours).padStart(2,"0")+
-":"+
-String(minutes).padStart(2,"0")+
-":"+
+).textContent =
+String(hours).padStart(2,"0") +
+":" +
+String(minutes).padStart(2,"0") +
+":" +
 String(seconds).padStart(2,"0");
+
+
+/*
+  Mining is active
+*/
+
+if(remaining > 0){
 
 document.getElementById(
 "miningStatus"
-).textContent=
+).textContent =
 "⛏️ Mining in progress";
 
-if(remaining<=0){
+return;
+
+}
+
+
+/*
+  Mining completed
+*/
 
 clearInterval(timerInterval);
 
 document.getElementById(
 "miningStatus"
-).textContent=
+).textContent =
 "🎉 Mining complete";
 
-const button=
+const button =
 document.getElementById(
 "mineButton"
 );
 
-button.disabled=false;
+button.disabled = false;
 
-button.textContent=
+button.textContent =
 "💰 Claim Reward";
 
-button.onclick=claimReward;
+button.onclick =
+claimReward;
 
 showMessage(
 "Your mining cycle is complete."
 );
-
-}
-
-},1000);
 
 }
 
@@ -636,13 +836,13 @@ function showMessage(text){
 
 document.getElementById(
 "message"
-).textContent=text;
+).textContent = text;
 
 }
 
 
 /* https://laiuyjthzvharbttaehy.supabase.co/rest/v1/
-   START
+   START APP
 sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4- */
 
 connectUser();
@@ -650,4 +850,4 @@ connectUser();
 </script>
 
 </body>
-  </html>
+   </html>
