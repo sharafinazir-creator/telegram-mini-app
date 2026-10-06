@@ -66,7 +66,6 @@ align-items:center;
 }
 
 .muted{color:#999}
-
 .small{font-size:12px}
 
 button{
@@ -188,6 +187,64 @@ color:#f5c542;
 font-size:13px;
 margin:10px 0;
 }
+
+.ref-code{
+background:#0d0d0d;
+border:1px solid #292929;
+border-radius:12px;
+padding:14px;
+font-size:20px;
+font-weight:800;
+text-align:center;
+letter-spacing:1px;
+margin-top:12px;
+word-break:break-all;
+}
+
+.ref-link{
+background:#0d0d0d;
+border-radius:12px;
+padding:12px;
+font-size:11px;
+color:#aaa;
+word-break:break-all;
+margin-top:10px;
+}
+
+input{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #292929;
+background:#0d0d0d;
+color:#fff;
+font-size:16px;
+outline:none;
+margin-top:10px;
+}
+
+input:focus{
+border-color:#f5c542;
+}
+
+.ref-stats{
+display:flex;
+gap:8px;
+margin-top:12px;
+}
+
+.ref-box{
+background:#0d0d0d;
+border-radius:12px;
+padding:14px;
+flex:1;
+text-align:center;
+}
+
+.big{
+font-size:22px;
+font-weight:800;
+}
 </style>
 </head>
 
@@ -197,7 +254,6 @@ margin:10px 0;
 
 <div class="header">
 <div class="dog">🐕</div>
-
 <div>
 <div class="title">DOGS EarningBot</div>
 <div class="sub">Mine • Earn • Grow</div>
@@ -206,7 +262,6 @@ margin:10px 0;
 
 
 <!-- HOME -->
-
 <div id="home" class="page active">
 
 <div class="card">
@@ -220,58 +275,33 @@ Your DOGS Balance
 </div>
 
 <div class="row small">
-
-<span id="username">
-@user
-</span>
-
-<span id="level">
-Level 0
-</span>
-
+<span id="username">@user</span>
+<span id="level">Level 0</span>
 </div>
 
 </div>
 
 
 <!-- MINING -->
-
 <div class="card">
 
 <div class="row">
-
 <b>⛏️ Mining</b>
-
 <span id="miningStatus" class="gold">
 Ready to mine
 </span>
-
 </div>
 
 <div class="stats">
 
 <div class="stat">
-
-<div class="small muted">
-Speed
-</div>
-
-<b id="speed">
-5 DOGS/h
-</b>
-
+<div class="small muted">Speed</div>
+<b id="speed">5 DOGS/h</b>
 </div>
 
 <div class="stat">
-
-<div class="small muted">
-Cycle
-</div>
-
-<b>
-4 hours
-</b>
-
+<div class="small muted">Cycle</div>
+<b>4 hours</b>
 </div>
 
 </div>
@@ -288,21 +318,16 @@ Cycle
 
 
 <!-- DAILY BONUS -->
-
 <div class="card">
 
 <div class="row">
-
 <b>🎁 Daily Bonus</b>
-
 <span id="streakLabel" class="gold">
 Day 1
 </span>
-
 </div>
 
-<div id="bonusDays" class="bonus">
-</div>
+<div id="bonusDays" class="bonus"></div>
 
 <button id="bonusButton" onclick="claimDailyBonus()">
 🎁 Claim Daily Bonus
@@ -310,21 +335,17 @@ Day 1
 
 </div>
 
-
 <div id="message" class="message"></div>
 
 </div>
 
 
 <!-- MINING PAGE -->
-
 <div id="mining" class="page">
 
 <div class="card">
 
-<h3>
-⛏️ Mining
-</h3>
+<h3>⛏️ Mining</h3>
 
 <p class="muted small">
 Start a 4-hour mining cycle. Your reward is calculated from your current mining speed.
@@ -344,18 +365,46 @@ Start a 4-hour mining cycle. Your reward is calculated from your current mining 
 
 
 <!-- TASKS -->
-
 <div id="tasks" class="page">
 
 <div class="card">
 
-<h3>
-🎯 Tasks
-</h3>
+<h3>🎯 Tasks</h3>
 
-<p class="muted">
-Tasks and ads will be added next.
+<div class="card" style="margin-top:10px">
+
+<div class="row">
+<b>📢 Join Telegram Channel</b>
+<span class="gold">+100 DOGS</span>
+</div>
+
+<p class="muted small">
+Task system will be connected to real channels later.
 </p>
+
+<button class="secondary" disabled>
+Coming Soon
+</button>
+
+</div>
+
+
+<div class="card">
+
+<div class="row">
+<b>📺 Watch Advertisement</b>
+<span class="gold">Reward</span>
+</div>
+
+<p class="muted small">
+Watch ads and earn additional DOGS.
+</p>
+
+<button class="secondary" disabled>
+Coming Soon
+</button>
+
+</div>
 
 </div>
 
@@ -363,18 +412,69 @@ Tasks and ads will be added next.
 
 
 <!-- REFERRAL -->
-
 <div id="referral" class="page">
 
 <div class="card">
 
-<h3>
-👥 Referral
-</h3>
+<h3>👥 Referral Program</h3>
 
-<p class="muted">
-Referral system will be connected next.
+<p class="muted small">
+Invite friends and earn DOGS rewards.
 </p>
+
+<div class="ref-stats">
+
+<div class="ref-box">
+<div class="small muted">Referrals</div>
+<div id="refCount" class="big">0</div>
+</div>
+
+<div class="ref-box">
+<div class="small muted">Earned</div>
+<div id="refEarned" class="big gold">0</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<b>🎁 Your Referral Code</b>
+
+<div id="myReferralCode" class="ref-code">
+Loading...
+</div>
+
+<div id="myReferralLink" class="ref-link">
+Loading referral link...
+</div>
+
+<button id="copyReferralButton" onclick="copyReferralLink()">
+📋 Copy Referral Link
+</button>
+
+</div>
+
+
+<div class="card">
+
+<b>🔗 Have a Referral Code?</b>
+
+<p class="muted small">
+Enter the code of the person who invited you.
+</p>
+
+<input
+id="referralInput"
+placeholder="Enter referral code"
+maxlength="100"
+/>
+
+<button onclick="applyReferral()">
+🎁 Apply Referral
+</button>
 
 </div>
 
@@ -382,14 +482,11 @@ Referral system will be connected next.
 
 
 <!-- WALLET -->
-
 <div id="wallet" class="page">
 
 <div class="card">
 
-<h3>
-💰 Wallet
-</h3>
+<h3>💰 Wallet</h3>
 
 <div class="balance" id="walletBalance">
 0 DOGS
@@ -407,7 +504,6 @@ Deposits and withdrawals will be connected later.
 
 
 <!-- NAVIGATION -->
-
 <div class="nav">
 
 <div class="nav-inner">
@@ -451,10 +547,8 @@ window.Telegram &&
 window.Telegram.WebApp;
 
 if(tg){
-
 tg.ready();
 tg.expand();
-
 }
 
 
@@ -462,9 +556,7 @@ let telegramUser =
 tg?.initDataUnsafe?.user || null;
 
 let currentUser = null;
-
 let currentSession = null;
-
 let timerInterval = null;
 
 
@@ -473,54 +565,82 @@ document.getElementById(id);
 
 
 function showMessage(text){
-
-$("message").textContent =
-text || "";
-
+$("message").textContent = text || "";
 }
 
 
 function money(n){
-
-return Number(n || 0)
-.toLocaleString() + " DOGS";
-
+return Number(n || 0).toLocaleString() + " DOGS";
 }
 
 
+/* ---------------- NAVIGATION ---------------- */
+
+document.querySelectorAll(".nav button")
+.forEach(button => {
+
+button.addEventListener("click", () => {
+
+document.querySelectorAll(".nav button")
+.forEach(b => b.classList.remove("active"));
+
+button.classList.add("active");
+
+document.querySelectorAll(".page")
+.forEach(page => page.classList.remove("active"));
+
+const page =
+document.getElementById(
+button.dataset.page
+);
+
+if(page){
+page.classList.add("active");
+}
+
+});
+
+});
+
+
+/* ---------------- UI ---------------- */
+
 function updateUI(){
 
-if(!currentUser)
-return;
-
+if(!currentUser) return;
 
 $("balance").textContent =
 money(currentUser.balance);
 
-
 $("walletBalance").textContent =
 money(currentUser.balance);
-
 
 $("username").textContent =
 currentUser.username
 ? "@" + currentUser.username
 : (currentUser.first_name || "User");
 
-
 $("level").textContent =
 "Level " + Number(currentUser.level || 0);
-
 
 $("speed").textContent =
 Number(currentUser.mining_speed || 5)
 + " DOGS/h";
 
+$("refCount").textContent =
+Number(currentUser.referral_count || 0);
+
+$("refEarned").textContent =
+Number(currentUser.referral_earnings || 0)
+.toLocaleString();
 
 renderBonus();
+renderReferral();
 
 }
 
+
+/* ---------------- CONNECT USER ---------------- */
 
 async function connectUser(){
 
@@ -531,21 +651,17 @@ showMessage(
 );
 
 return;
-
 }
-
 
 try{
 
 showMessage("Connecting...");
-
 
 const response =
 await fetch(
 SUPABASE_URL +
 "/functions/v1/telegram-user-v2",
 {
-
 method:"POST",
 
 headers:{
@@ -560,10 +676,8 @@ initData:tg.initData
 }
 );
 
-
 const data =
 await response.json();
-
 
 if(!response.ok){
 
@@ -574,7 +688,6 @@ data.error ||
 
 }
 
-
 if(!data.user){
 
 throw new Error(
@@ -583,10 +696,8 @@ throw new Error(
 
 }
 
-
 currentUser =
 data.user;
-
 
 updateUI();
 
@@ -594,16 +705,11 @@ showMessage(
 "Connected ✓"
 );
 
-
 restoreSavedMining();
 
-
 if(!currentSession){
-
 await checkMining();
-
 }
-
 
 }catch(e){
 
@@ -616,6 +722,8 @@ e.message
 
 }
 
+
+/* ---------------- MINING STORAGE ---------------- */
 
 function saveMining(){
 
@@ -640,12 +748,10 @@ localStorage.getItem(
 "dogs_mining_session"
 );
 
-
 if(saved){
 
 const s =
 JSON.parse(saved);
-
 
 if(
 s.ends_at &&
@@ -659,7 +765,6 @@ startTimer();
 return;
 
 }
-
 
 localStorage.removeItem(
 "dogs_mining_session"
@@ -678,11 +783,11 @@ localStorage.removeItem(
 }
 
 
+/* ---------------- CHECK MINING ---------------- */
+
 async function checkMining(){
 
-if(!currentUser)
-return;
-
+if(!currentUser) return;
 
 try{
 
@@ -700,7 +805,6 @@ new Date().toISOString()
 "&order=created_at.desc" +
 "&limit=1";
 
-
 const response =
 await fetch(
 url,
@@ -711,14 +815,10 @@ headers:{
 }
 );
 
-
-if(!response.ok)
-return;
-
+if(!response.ok) return;
 
 const sessions =
 await response.json();
-
 
 if(sessions.length){
 
@@ -744,24 +844,39 @@ console.log(e);
 }
 
 
+/* ---------------- START MINING ---------------- */
+
 async function startMining(){
 
 if(!currentUser){
 
+showMessage("Please wait...");
+return;
+
+}
+
+if(currentSession){
+
+if(
+new Date(currentSession.ends_at) > new Date()
+){
+
+startTimer();
+
 showMessage(
-"Please wait..."
+"Mining is already active ✓"
 );
 
 return;
 
 }
 
+}
 
 const buttons = [
 $("mineButton"),
 $("mineButton2")
 ];
-
 
 buttons.forEach(
 b=>{
@@ -769,11 +884,9 @@ if(b)b.disabled=true;
 }
 );
 
-
 showMessage(
 "Starting mining..."
 );
-
 
 try{
 
@@ -782,7 +895,6 @@ await fetch(
 SUPABASE_URL +
 "/functions/v1/start-mining",
 {
-
 method:"POST",
 
 headers:{
@@ -797,10 +909,8 @@ initData:tg.initData
 }
 );
 
-
 const data =
 await response.json();
-
 
 if(
 data.session &&
@@ -822,7 +932,6 @@ return;
 
 }
 
-
 if(
 !response.ok ||
 !data.success
@@ -835,7 +944,6 @@ data.error ||
 
 }
 
-
 currentSession =
 data.session;
 
@@ -847,14 +955,12 @@ showMessage(
 "Mining started successfully! ✓"
 );
 
-
 }catch(e){
 
 showMessage(
 "Mining error: " +
 e.message
 );
-
 
 buttons.forEach(
 b=>{
@@ -867,52 +973,44 @@ if(b)b.disabled=false;
 }
 
 
+/* ---------------- TIMER ---------------- */
+
 function updateTimer(){
 
-if(!currentSession)
-return;
-
+if(!currentSession) return;
 
 const remaining =
 Math.max(
 0,
-new Date(currentSession.ends_at)
--
+new Date(currentSession.ends_at) -
 new Date()
 );
-
 
 const total =
 Math.floor(
 remaining / 1000
 );
 
-
 const h =
 String(
 Math.floor(total / 3600)
 ).padStart(2,"0");
-
 
 const m =
 String(
 Math.floor((total % 3600) / 60)
 ).padStart(2,"0");
 
-
 const s =
 String(
 total % 60
 ).padStart(2,"0");
 
-
 $("timer").textContent =
 `${h}:${m}:${s}`;
 
-
 $("miningTimer2").textContent =
 `${h}:${m}:${s}`;
-
 
 $("miningStatus").textContent =
 remaining > 0
@@ -922,10 +1020,7 @@ remaining > 0
 
 if(remaining <= 0){
 
-clearInterval(
-timerInterval
-);
-
+clearInterval(timerInterval);
 
 $("mineButton").disabled=false;
 
@@ -935,7 +1030,6 @@ $("mineButton").textContent =
 $("mineButton").onclick =
 claimReward;
 
-
 $("mineButton2").disabled=false;
 
 $("mineButton2").textContent =
@@ -943,7 +1037,6 @@ $("mineButton2").textContent =
 
 $("mineButton2").onclick =
 claimReward;
-
 
 showMessage(
 "Your mining cycle is complete."
@@ -956,15 +1049,10 @@ showMessage(
 
 function startTimer(){
 
-clearInterval(
-timerInterval
-);
-
+clearInterval(timerInterval);
 
 $("mineButton").disabled=true;
-
 $("mineButton2").disabled=true;
-
 
 $("mineButton").textContent =
 "⛏️ Mining...";
@@ -972,9 +1060,7 @@ $("mineButton").textContent =
 $("mineButton2").textContent =
 "⛏️ Mining...";
 
-
 updateTimer();
-
 
 timerInterval =
 setInterval(
@@ -985,21 +1071,18 @@ updateTimer,
 }
 
 
+/* ---------------- CLAIM MINING ---------------- */
+
 async function claimReward(){
 
-if(!currentUser)
-return;
-
+if(!currentUser) return;
 
 $("mineButton").disabled=true;
-
 $("mineButton2").disabled=true;
-
 
 showMessage(
 "Claiming reward..."
 );
-
 
 try{
 
@@ -1008,20 +1091,13 @@ await fetch(
 SUPABASE_URL +
 "/functions/v1/claim-mining",
 {
-
 method:"POST",
 
 headers:{
-
-"Content-Type":
-"application/json",
-
-"apikey":
-SUPABASE_KEY,
-
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY,
 "Authorization":
 "Bearer " + SUPABASE_KEY
-
 },
 
 body:JSON.stringify({
@@ -1032,10 +1108,8 @@ telegramUser.id
 }
 );
 
-
 const data =
 await response.json();
-
 
 if(
 !response.ok ||
@@ -1049,34 +1123,25 @@ data.error ||
 
 }
 
-
-currentSession =
-null;
-
+currentSession = null;
 
 localStorage.removeItem(
 "dogs_mining_session"
 );
 
-
 currentUser.balance =
 data.balance;
 
-
 updateUI();
-
 
 $("miningStatus").textContent =
 "Ready to mine";
 
-
 $("timer").textContent =
 "04:00:00";
 
-
 $("miningTimer2").textContent =
 "04:00:00";
-
 
 $("mineButton").textContent =
 "🚀 Start Mining";
@@ -1084,21 +1149,17 @@ $("mineButton").textContent =
 $("mineButton").onclick =
 startMining;
 
-
 $("mineButton2").textContent =
 "🚀 Start Mining";
 
 $("mineButton2").onclick =
 startMining;
 
-
 showMessage(
 "🎉 +" +
-Number(data.reward)
-.toLocaleString() +
+Number(data.reward).toLocaleString() +
 " DOGS claimed!"
 );
-
 
 }catch(e){
 
@@ -1107,9 +1168,7 @@ showMessage(
 e.message
 );
 
-
 $("mineButton").disabled=false;
-
 $("mineButton2").disabled=false;
 
 }
@@ -1117,11 +1176,11 @@ $("mineButton2").disabled=false;
 }
 
 
+/* ---------------- DAILY BONUS ---------------- */
+
 function renderBonus(){
 
-if(!currentUser)
-return;
-
+if(!currentUser) return;
 
 const streak =
 Math.max(
@@ -1132,10 +1191,8 @@ Number(currentUser.daily_streak || 0) + 1
 )
 );
 
-
 $("streakLabel").textContent =
 "Day " + streak;
-
 
 const last =
 currentUser.last_daily_claim
@@ -1144,38 +1201,26 @@ currentUser.last_daily_claim
 )
 : null;
 
-
 const now =
 new Date();
-
 
 const claimedToday =
 last &&
 last.getUTCFullYear() ===
 now.getUTCFullYear() &&
-
 last.getUTCMonth() ===
 now.getUTCMonth() &&
-
 last.getUTCDate() ===
 now.getUTCDate();
 
-
 let html = "";
 
-
-for(
-let i=1;
-i<=7;
-i++
-){
+for(let i=1;i<=7;i++){
 
 const reward =
-20 + (i-1) * 10;
-
+20 + (i-1)*10;
 
 let cls = "";
-
 
 if(
 i <=
@@ -1188,7 +1233,6 @@ cls = "claimed";
 
 }
 
-
 if(
 i === streak &&
 !claimedToday
@@ -1198,9 +1242,7 @@ cls = "active";
 
 }
 
-
 html +=
-
 `<div class="day ${cls}">
 <b>Day ${i}</b>
 <br>
@@ -1211,14 +1253,11 @@ ${reward}
 
 }
 
-
 $("bonusDays").innerHTML =
 html;
 
-
 $("bonusButton").disabled =
 !!claimedToday;
-
 
 $("bonusButton").textContent =
 claimedToday
@@ -1232,18 +1271,13 @@ claimedToday
 
 async function claimDailyBonus(){
 
-if(!currentUser)
-return;
+if(!currentUser) return;
 
-
-$("bonusButton").disabled =
-true;
-
+$("bonusButton").disabled=true;
 
 showMessage(
 "Claiming daily bonus..."
 );
-
 
 try{
 
@@ -1252,20 +1286,13 @@ await fetch(
 SUPABASE_URL +
 "/functions/v1/daily-bonus",
 {
-
 method:"POST",
 
 headers:{
-
-"Content-Type":
-"application/json",
-
-"apikey":
-SUPABASE_KEY,
-
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY,
 "Authorization":
 "Bearer " + SUPABASE_KEY
-
 },
 
 body:JSON.stringify({
@@ -1276,10 +1303,8 @@ telegramUser.id
 }
 );
 
-
 const data =
 await response.json();
-
 
 if(
 !response.ok ||
@@ -1288,103 +1313,263 @@ if(
 
 throw new Error(
 data.error ||
-"Bonus claim failed"
+"Daily bonus failed"
 );
 
 }
-
 
 currentUser.balance =
 data.balance;
 
-
 currentUser.daily_streak =
 data.streak;
-
 
 currentUser.last_daily_claim =
 new Date().toISOString();
 
-
 updateUI();
 
-
 showMessage(
-"🎉 Day " +
+"🎁 Day " +
 data.streak +
-": +" +
-Number(data.reward)
-.toLocaleString() +
+" bonus claimed: +" +
+data.reward +
 " DOGS!"
 );
-
 
 }catch(e){
 
 showMessage(
-"Daily Bonus: " +
+"Bonus error: " +
 e.message
 );
 
+$("bonusButton").disabled=false;
 
-renderBonus();
+}
+
+}
+
+
+/* ---------------- REFERRAL ---------------- */
+
+function renderReferral(){
+
+if(!currentUser) return;
+
+const code =
+currentUser.referral_code;
+
+if(code){
+
+$("myReferralCode").textContent =
+code;
+
+const botUsername =
+"YOUR_BOT_USERNAME";
+
+const link =
+"https://t.me/" +
+botUsername +
+"?start=" +
+encodeURIComponent(code);
+
+$("myReferralLink").textContent =
+link;
+
+}else{
+
+$("myReferralCode").textContent =
+"Not available yet";
+
+$("myReferralLink").textContent =
+"Your referral code will appear here.";
+
+}
+
+$("refCount").textContent =
+Number(
+currentUser.referral_count || 0
+);
+
+$("refEarned").textContent =
+Number(
+currentUser.referral_earnings || 0
+).toLocaleString();
+
+}
+
+
+async function applyReferral(){
+
+if(!currentUser || !tg) return;
+
+const input =
+$("referralInput");
+
+const code =
+input.value.trim();
+
+if(!code){
+
+showMessage(
+"Please enter a referral code."
+);
+
+return;
+
+}
+
+try{
+
+showMessage(
+"Applying referral..."
+);
+
+const response =
+await fetch(
+SUPABASE_URL +
+"/functions/v1/referral",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY
+},
+
+body:JSON.stringify({
+
+initData:tg.initData,
+
+referralCode:code
+
+})
+
+}
+);
+
+const data =
+await response.json();
+
+if(
+!response.ok ||
+!data.success
+){
+
+throw new Error(
+data.error ||
+"Referral failed"
+);
+
+}
+
+currentUser.referred_by =
+true;
+
+showMessage(
+"🎉 Referral applied successfully!"
+);
+
+$("referralInput").value = "";
+
+}catch(e){
+
+showMessage(
+"Referral error: " +
+e.message
+);
 
 }
 
 }
 
 
-document
-.querySelectorAll(
-".nav button"
-)
-.forEach(
-btn=>{
+/* ---------------- COPY REFERRAL ---------------- */
 
-btn.addEventListener(
-"click",
-()=>{
+async function copyReferralLink(){
 
-document
-.querySelectorAll(
-".nav button"
-)
-.forEach(
-x=>
-x.classList.remove(
-"active"
-)
+const element =
+$("myReferralLink");
+
+const link =
+element.textContent;
+
+if(
+!link ||
+link.startsWith("Your referral")
+){
+
+showMessage(
+"Referral link is not available yet."
 );
 
+return;
 
-document
-.querySelectorAll(
-".page"
-)
-.forEach(
-x=>
-x.classList.remove(
-"active"
-)
+}
+
+try{
+
+if(
+navigator.clipboard
+){
+
+await navigator.clipboard.writeText(link);
+
+showMessage(
+"📋 Referral link copied!"
 );
 
+}else{
 
-btn.classList.add(
-"active"
-);
-
-
-$(btn.dataset.page)
-.classList.add(
-"active"
+showMessage(
+"Copy is not supported here."
 );
 
 }
+
+}catch(e){
+
+showMessage(
+"Could not copy the link."
 );
 
 }
-);
 
+}
+
+
+/* ---------------- START PARAMETER ---------------- */
+
+function checkStartReferral(){
+
+try{
+
+const startParam =
+tg?.initDataUnsafe?.start_param;
+
+if(
+startParam &&
+$("referralInput")
+){
+
+$("referralInput").value =
+startParam;
+
+}
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+
+/* ---------------- START APP ---------------- */
+
+checkStartReferral();
 
 connectUser();
 
