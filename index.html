@@ -1422,68 +1422,55 @@ return;
 
 try{
 
-showMessage(
-"Applying referral..."
-);
+function shareReferralLink(){
 
-const response =
-await fetch(
-SUPABASE_URL +
-"/functions/v1/referral",
-{
-method:"POST",
+  if(!currentUser){
+    showMessage("Please wait...");
+    return;
+  }
 
-headers:{
-"Content-Type":"application/json",
-"apikey":SUPABASE_KEY
-},
+  const code =
+    currentUser.referral_code;
 
-body:JSON.stringify({
+  if(!code){
+    showMessage(
+      "Referral code is not available yet."
+    );
+    return;
+  }
 
-initData:tg.initData,
+  const botUsername =
+    "Dogsearningbot";
 
-referralCode:code
+  const link =
+    "https://t.me/" +
+    botUsername +
+    "?start=" +
+    encodeURIComponent(code);
 
-})
+  const text =
+    "🐕 Join DOGS EarningBot and start earning DOGS!\n\n" +
+    "Use my referral link:";
 
+  const shareUrl =
+    "https://t.me/share/url?url=" +
+    encodeURIComponent(link) +
+    "&text=" +
+    encodeURIComponent(text);
+
+  if(tg && tg.openTelegramLink){
+
+    tg.openTelegramLink(shareUrl);
+
+  }else{
+
+    window.open(
+      shareUrl,
+      "_blank"
+    );
+
+  }
 }
-);
-
-const data =
-await response.json();
-
-if(
-!response.ok ||
-!data.success
-){
-
-throw new Error(
-data.error ||
-"Referral failed"
-);
-
-}
-
-currentUser.referred_by =
-true;
-
-showMessage(
-"🎉 Referral applied successfully!"
-);
-
-$("referralInput").value = "";
-
-}catch(e){
-
-showMessage(
-"Referral error: " +
-e.message
-);
-
-}
-
-}
-
 
 /* ---------------- COPY REFERRAL ---------------- */
 
