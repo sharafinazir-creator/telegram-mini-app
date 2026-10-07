@@ -39,7 +39,7 @@ if(tg){tg.ready();tg.expand()}
 let telegramUser=tg?.initDataUnsafe?.user||null,currentUser=null,currentSession=null,timerInterval=null;
 
 const $=id=>document.getElementById(id);
-const api=async(action,extra={})=>{const r=await fetch(SUPABASE_URL+"/functions/v1/dogs-api",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify({action,initData:tg.initData,startParam:tg.initDataUnsafe?.start_param||"",...extra})});const d=await r.json();if(!r.ok||!d.success)throw Error(d.error||"Request failed");return d};
+const api=async(action,extra={})=>{const r=await fetch(SUPABASE_URL+"/functions/v1/dogs-api",{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify({action,initData:tg.initData,...extra})});const d=await r.json();if(!r.ok||!d.success)throw Error(d.error||"Request failed");return d};
 };
 const msg=x=>$("message").textContent=x||"";
 const money=x=>Number(x||0).toLocaleString()+" DOGS";
