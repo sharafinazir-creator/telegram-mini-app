@@ -71,7 +71,8 @@ async function connectUser(){
  if(!telegramUser){msg("Please open this app inside Telegram.");return}
  try{
   msg("Connecting...");
-  const d=await api("connect");
+  const startParam=tg?.initDataUnsafe?.start_param||"";
+  const d=await api("connect",{startParam});
   currentUser=d.user;
   updateUI();
   msg("Connected ✓");
