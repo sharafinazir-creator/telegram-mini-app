@@ -251,7 +251,7 @@ function renderReferral(){
  const code=currentUser.referral_code;
  if(code){
   $("myReferralCode").textContent=code;
-  $("myReferralLink").textContent="https://t.me/Dogsearningbot?start="+encodeURIComponent(code)
+  $("myReferralLink").textContent="https://t.me/Dogsearningbot?startapp="+encodeURIComponent(code)
  }else{
   $("myReferralCode").textContent="Not available yet";
   $("myReferralLink").textContent="Referral link unavailable"
