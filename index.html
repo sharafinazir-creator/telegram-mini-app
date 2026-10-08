@@ -28,18 +28,18 @@ button:disabled{opacity:.5}.secondary{background:#202020;color:#fff}
 .ref-code,.ref-link{background:#0d0d0d;border-radius:12px;padding:12px;margin-top:10px;word-break:break-all}
 .ref-code{font-size:20px;font-weight:800;text-align:center}.ref-link{font-size:11px;color:#aaa}
 .big{font-size:22px;font-weight:800}
+.task-card{background:#0d0d0d;border:1px solid #292929;border-radius:14px;padding:14px;margin-top:12px}
+.task-reward{font-weight:800}.task-title{font-weight:800}
+.task-description{font-size:12px;color:#999;margin:8px 0}
 .nav{position:fixed;bottom:0;left:0;right:0;background:#101010;border-top:1px solid #292929;display:flex;justify-content:center;z-index:5}
 .nav-inner{max-width:520px;width:100%;display:flex}
 .nav button{margin:0;background:transparent;color:#888;border-radius:0;padding:12px 5px;font-size:11px}
 .nav button.active{color:#f5c542}
 .page{display:none}.page.active{display:block}
-.task-card{background:#0d0d0d;border:1px solid #292929;border-radius:14px;padding:14px;margin-top:12px}
-.task-title{font-weight:800}
-.task-desc{color:#999;font-size:12px;margin:8px 0}
 </style>
 </head>
-<body>
 
+<body>
 <div class="app">
 
 <div class="header">
@@ -72,14 +72,18 @@ button:disabled{opacity:.5}.secondary{background:#202020;color:#fff}
 <div class="small muted">Speed</div>
 <b id="speed">5 DOGS/h</b>
 </div>
+
 <div class="stat">
 <div class="small muted">Cycle</div>
 <b>4 hours</b>
 </div>
 </div>
 
-<div id="timer" class="timer">04:00:00</div>
-<button id="mineButton" onclick="startMining()">🚀 Start Mining</button>
+<div id="timer" class="timer">00:00:00</div>
+
+<button id="mineButton" onclick="startMining()">
+🚀 Start Mining
+</button>
 </div>
 
 <div class="card">
@@ -87,38 +91,76 @@ button:disabled{opacity:.5}.secondary{background:#202020;color:#fff}
 <b>🎁 Daily Bonus</b>
 <span id="streakLabel" class="gold">Day 1</span>
 </div>
+
 <div id="bonusDays" class="bonus"></div>
-<button id="bonusButton" onclick="claimDailyBonus()">🎁 Claim Daily Bonus</button>
+
+<button id="bonusButton" onclick="claimDailyBonus()">
+🎁 Claim Daily Bonus
+</button>
 </div>
 
 <div id="message" class="message"></div>
+
 </div>
+
 
 <div id="mining" class="page">
+
 <div class="card">
 <h3>⛏️ Mining</h3>
-<p class="muted small">Start a mining cycle and earn DOGS.</p>
-<div id="miningTimer2" class="timer">04:00:00</div>
-<button id="mineButton2" onclick="startMining()">🚀 Start Mining</button>
-</div>
+<p class="muted small">
+Start a mining cycle and earn DOGS.
+</p>
+
+<div id="miningTimer2" class="timer">
+00:00:00
 </div>
 
+<button id="mineButton2" onclick="startMining()">
+🚀 Start Mining
+</button>
+</div>
+
+</div>
+
+
+<!-- TASKS -->
 <div id="tasks" class="page">
+
 <div class="card">
+
+<div class="row">
 <h3>🎯 Tasks</h3>
-<div id="tasksList">
-<p class="muted small">Loading tasks...</p>
+<span id="taskCount" class="gold">0</span>
 </div>
+
+<p class="muted small">
+Complete tasks and earn DOGS rewards.
+</p>
+
+<div id="taskList">
+<div class="muted small">
+Loading tasks...
 </div>
 </div>
 
+</div>
+
+</div>
+
+
+<!-- REFERRAL -->
 <div id="referral" class="page">
 
 <div class="card">
 <h3>👥 Referral Program</h3>
-<p class="muted small">Invite friends and earn DOGS rewards.</p>
+
+<p class="muted small">
+Invite friends and earn DOGS rewards.
+</p>
 
 <div class="ref-stats">
+
 <div class="ref-box">
 <div class="small muted">Referrals</div>
 <div id="refCount" class="big">0</div>
@@ -128,438 +170,1053 @@ button:disabled{opacity:.5}.secondary{background:#202020;color:#fff}
 <div class="small muted">Earned</div>
 <div id="refEarned" class="big gold">0</div>
 </div>
+
 </div>
 </div>
 
+
 <div class="card">
+
 <b>🎁 Your Referral Link</b>
-<div id="myReferralCode" class="ref-code">Loading...</div>
-<div id="myReferralLink" class="ref-link">Loading...</div>
-<button onclick="copyReferralLink()">📋 Copy Referral Link</button>
-<button class="secondary" onclick="shareReferralLink()">📤 Share Referral Link</button>
+
+<div id="myReferralCode" class="ref-code">
+Loading...
 </div>
+
+<div id="myReferralLink" class="ref-link">
+Loading...
+</div>
+
+<button onclick="copyReferralLink()">
+📋 Copy Referral Link
+</button>
+
+<button class="secondary" onclick="shareReferralLink()">
+📤 Share Referral Link
+</button>
 
 </div>
 
+</div>
+
+
+<!-- WALLET -->
 <div id="wallet" class="page">
+
 <div class="card">
+
 <h3>💰 Wallet</h3>
-<div id="walletBalance" class="balance">0 DOGS</div>
-<p class="muted">Deposits and withdrawals will be connected later.</p>
+
+<div id="walletBalance" class="balance">
+0 DOGS
 </div>
+
+<p class="muted">
+Deposits and withdrawals will be connected later.
+</p>
+
+</div>
+
 </div>
 
 </div>
 
+
+<!-- NAVIGATION -->
 <div class="nav">
 <div class="nav-inner">
-<button class="active" data-page="home">🏠<br>Home</button>
-<button data-page="mining">⛏️<br>Mining</button>
-<button data-page="tasks">🎯<br>Tasks</button>
-<button data-page="referral">👥<br>Referral</button>
-<button data-page="wallet">💰<br>Wallet</button>
+
+<button class="active" data-page="home">
+🏠<br>Home
+</button>
+
+<button data-page="mining">
+⛏️<br>Mining
+</button>
+
+<button data-page="tasks">
+🎯<br>Tasks
+</button>
+
+<button data-page="referral">
+👥<br>Referral
+</button>
+
+<button data-page="wallet">
+💰<br>Wallet
+</button>
+
 </div>
 </div>
+
 
 <script>
 
-const SUPABASE_URL="https://laiuyjthzvharbttaehy.supabase.co",SUPABASE_KEY="sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-",tg=window.Telegram&&window.Telegram.WebApp;
+const SUPABASE_URL=
+"https://laiuyjthzvharbttaehy.supabase.co";
 
-if(tg){tg.ready();tg.expand()}
+const SUPABASE_KEY=
+"sb_publishable_mBorYuaLAS8KuAmePBnC6A_axve6-4-";
 
-let telegramUser=tg?.initDataUnsafe?.user||null;
+const tg=
+window.Telegram&&
+window.Telegram.WebApp;
+
+if(tg){
+tg.ready();
+tg.expand();
+}
+
+let telegramUser=
+tg?.initDataUnsafe?.user||null;
+
 let currentUser=null;
 let currentSession=null;
 let timerInterval=null;
-let currentTasks=[];
+let tasks=[];
 
-const $=id=>document.getElementById(id);
+const $=id=>
+document.getElementById(id);
+
 
 const api=async(action,extra={})=>{
- const r=await fetch(SUPABASE_URL+"/functions/v1/dogs-api",{
-  method:"POST",
-  headers:{
-   "Content-Type":"application/json",
-   "apikey":SUPABASE_KEY
-  },
-  body:JSON.stringify({
-   action,
-   initData:tg.initData,
-   ...extra
-  })
- });
- const d=await r.json();
- if(!r.ok||!d.success)throw Error(d.error||"Request failed");
- return d
+
+const r=
+await fetch(
+SUPABASE_URL+
+"/functions/v1/dogs-api",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"apikey":SUPABASE_KEY
+},
+body:JSON.stringify({
+action,
+initData:tg.initData,
+...extra
+})
+}
+);
+
+const d=await r.json();
+
+if(!r.ok||!d.success)
+throw Error(d.error||"Request failed");
+
+return d;
+
 };
 
-const msg=x=>$("message").textContent=x||"";
-const money=x=>Number(x||0).toLocaleString()+" DOGS";
 
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{
- document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- b.classList.add("active");
- $(b.dataset.page).classList.add("active");
+const msg=x=>
+$("message").textContent=x||"";
 
- if(b.dataset.page==="tasks")loadTasks();
+
+const money=x=>
+Number(x||0).toLocaleString()+
+" DOGS";
+
+
+/* NAVIGATION */
+
+document
+.querySelectorAll(".nav button")
+.forEach(b=>{
+
+b.onclick=()=>{
+
+document
+.querySelectorAll(".nav button")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+document
+.querySelectorAll(".page")
+.forEach(x=>
+x.classList.remove("active")
+);
+
+b.classList.add("active");
+
+$(b.dataset.page)
+.classList.add("active");
+
+if(b.dataset.page==="tasks")
+loadTasks();
+
+};
+
 });
 
-function miningKey(){
- return "dogs_mining_session_"+(telegramUser?.id||"unknown")
-}
 
-function updateUI(){
- if(!currentUser)return;
-
- $("balance").textContent=money(currentUser.balance);
- $("walletBalance").textContent=money(currentUser.balance);
- $("username").textContent=currentUser.username?"@"+currentUser.username:(currentUser.first_name||"User");
- $("level").textContent="Level "+Number(currentUser.level||0);
- $("speed").textContent=Number(currentUser.mining_speed||5)+" DOGS/h";
- $("refCount").textContent=Number(currentUser.referral_count||0);
- $("refEarned").textContent=Number(currentUser.referral_earnings||0).toLocaleString();
-
- renderBonus();
- renderReferral();
-}
+/* USER */
 
 async function connectUser(){
- if(!telegramUser){
-  msg("Please open this app inside Telegram.");
-  return
- }
 
- try{
-  msg("Connecting...");
+if(!telegramUser){
 
-  const startParam=tg?.initDataUnsafe?.start_param||"";
-  const d=await api("connect",{startParam});
+msg(
+"Please open this app inside Telegram."
+);
 
-  currentUser=d.user;
+return;
 
-  updateUI();
-  loadTasks();
-
-  msg("Connected ✓");
-  restoreSavedMining();
-
- }catch(e){
-  msg("Connection error: "+e.message)
- }
 }
 
-async function loadTasks(){
- if(!currentUser)return;
+try{
 
- const box=$("tasksList");
- box.innerHTML='<p class="muted small">Loading tasks...</p>';
+msg("Connecting...");
 
- try{
-  const d=await api("get_tasks");
+const d=
+await api("connect");
 
-  currentTasks=d.tasks||[];
+currentUser=d.user;
 
-  if(!currentTasks.length){
-   box.innerHTML='<p class="muted small">No tasks available right now.</p>';
-   return
-  }
+updateUI();
 
-  box.innerHTML=currentTasks.map(t=>`
-   <div class="task-card">
-    <div class="row">
-     <div class="task-title">📢 ${t.title}</div>
-     <span class="gold">+${Number(t.reward||0).toLocaleString()} DOGS</span>
-    </div>
+msg("Connected ✓");
 
-    <div class="task-desc">${t.description||""}</div>
+restoreSavedMining();
 
-    <button ${t.completed?"disabled":""} onclick="openTask(${t.id})">
-     ${t.completed?"✅ Completed":"🚀 Start Task"}
-    </button>
-   </div>
-  `).join("");
+loadTasks();
 
- }catch(e){
-  box.innerHTML='<p class="muted small">Could not load tasks.</p>';
-  msg("Tasks error: "+e.message)
- }
+}catch(e){
+
+msg(
+"Connection error: "+
+e.message
+);
+
 }
 
-function openTask(id){
- const task=currentTasks.find(x=>Number(x.id)===Number(id));
-
- if(task&&task.target_url){
-  if(tg)tg.openTelegramLink(task.target_url);
-  else window.open(task.target_url,"_blank");
- }else{
-  msg("Task link is not available.")
- }
 }
+
+
+/* UI */
+
+function updateUI(){
+
+if(!currentUser)return;
+
+$("balance").textContent=
+money(currentUser.balance);
+
+$("walletBalance").textContent=
+money(currentUser.balance);
+
+$("username").textContent=
+currentUser.username
+?"@"+currentUser.username
+:(currentUser.first_name||"User");
+
+$("level").textContent=
+"Level "+
+Number(currentUser.level||0);
+
+$("speed").textContent=
+Number(currentUser.mining_speed||5)+
+" DOGS/h";
+
+$("refCount").textContent=
+Number(currentUser.referral_count||0);
+
+$("refEarned").textContent=
+Number(
+currentUser.referral_earnings||0
+).toLocaleString();
+
+renderBonus();
+
+renderReferral();
+
+}
+
+
+/* MINING */
+
+function miningKey(){
+
+return "dogs_mining_session_"+
+(telegramUser?.id||"unknown");
+
+}
+
 
 function saveMining(){
- if(currentSession)localStorage.setItem(miningKey(),JSON.stringify(currentSession))
+
+if(currentSession)
+localStorage.setItem(
+miningKey(),
+JSON.stringify(currentSession)
+);
+
 }
+
 
 function clearSavedMining(){
- localStorage.removeItem(miningKey())
+
+localStorage.removeItem(
+miningKey()
+);
+
 }
+
 
 function restoreSavedMining(){
- try{
-  const x=localStorage.getItem(miningKey());
 
-  if(x){
-   const s=JSON.parse(x);
+try{
 
-   if(s&&s.ends_at){
-    currentSession=s;
+const x=
+localStorage.getItem(
+miningKey()
+);
 
-    if(new Date(s.ends_at)>new Date()){
-     startTimer();
-     return
-    }
+if(x){
 
-    showClaimState();
-    return
-   }
-  }
+const s=JSON.parse(x);
 
-  resetMiningUI();
+if(s&&s.ends_at){
 
- }catch(e){
-  clearSavedMining();
-  resetMiningUI()
- }
+currentSession=s;
+
+if(
+new Date(s.ends_at)>new Date()
+){
+
+startTimer();
+return;
+
 }
+
+showClaimState();
+return;
+
+}
+
+}
+
+resetMiningUI();
+
+}catch(e){
+
+clearSavedMining();
+
+resetMiningUI();
+
+}
+
+}
+
 
 function resetMiningUI(){
- currentSession=null;
 
- $("miningStatus").textContent="Ready to mine";
- $("timer").textContent="00:00:00";
- $("miningTimer2").textContent="00:00:00";
+currentSession=null;
 
- $("mineButton").disabled=false;
- $("mineButton2").disabled=false;
+clearInterval(timerInterval);
 
- $("mineButton").textContent="🚀 Start Mining";
- $("mineButton2").textContent="🚀 Start Mining";
+$("miningStatus").textContent=
+"Ready to mine";
 
- $("mineButton").onclick=startMining;
- $("mineButton2").onclick=startMining
+$("timer").textContent=
+"00:00:00";
+
+$("miningTimer2").textContent=
+"00:00:00";
+
+$("mineButton").disabled=false;
+$("mineButton2").disabled=false;
+
+$("mineButton").textContent=
+"🚀 Start Mining";
+
+$("mineButton2").textContent=
+"🚀 Start Mining";
+
+$("mineButton").onclick=
+startMining;
+
+$("mineButton2").onclick=
+startMining;
+
 }
+
 
 function showClaimState(){
- clearInterval(timerInterval);
 
- $("miningStatus").textContent="Ready to claim";
- $("timer").textContent="00:00:00";
- $("miningTimer2").textContent="00:00:00";
+clearInterval(timerInterval);
 
- $("mineButton").disabled=false;
- $("mineButton2").disabled=false;
+$("miningStatus").textContent=
+"Ready to claim";
 
- $("mineButton").textContent="💰 Claim Reward";
- $("mineButton2").textContent="💰 Claim Reward";
+$("timer").textContent=
+"00:00:00";
 
- $("mineButton").onclick=claimReward;
- $("mineButton2").onclick=claimReward;
+$("miningTimer2").textContent=
+"00:00:00";
 
- msg("🎉 Your mining cycle is complete!")
+$("mineButton").disabled=false;
+$("mineButton2").disabled=false;
+
+$("mineButton").textContent=
+"💰 Claim Reward";
+
+$("mineButton2").textContent=
+"💰 Claim Reward";
+
+$("mineButton").onclick=
+claimReward;
+
+$("mineButton2").onclick=
+claimReward;
+
+msg(
+"🎉 Your mining cycle is complete!"
+);
+
 }
+
 
 async function startMining(){
- if(!currentUser){
-  msg("Please wait...");
-  return
- }
 
- if(currentSession&&new Date(currentSession.ends_at)>new Date()){
-  startTimer();
-  msg("Mining is already active ✓");
-  return
- }
+if(!currentUser){
 
- $("mineButton").disabled=true;
- $("mineButton2").disabled=true;
+msg("Please wait...");
 
- msg("Starting mining...");
+return;
 
- try{
-  const d=await api("start_mining");
-
-  currentSession=d.session;
-  saveMining();
-  startTimer();
-
-  msg("Mining started successfully! ✓")
-
- }catch(e){
-  msg("Mining error: "+e.message);
-  $("mineButton").disabled=false;
-  $("mineButton2").disabled=false
- }
 }
+
+if(
+currentSession&&
+new Date(currentSession.ends_at)>new Date()
+){
+
+startTimer();
+
+msg(
+"Mining is already active ✓"
+);
+
+return;
+
+}
+
+$("mineButton").disabled=true;
+$("mineButton2").disabled=true;
+
+msg("Starting mining...");
+
+try{
+
+const d=
+await api("start_mining");
+
+currentSession=d.session;
+
+saveMining();
+
+startTimer();
+
+msg(
+"Mining started successfully! ✓"
+);
+
+}catch(e){
+
+msg(
+"Mining error: "+
+e.message
+);
+
+$("mineButton").disabled=false;
+$("mineButton2").disabled=false;
+
+}
+
+}
+
 
 function updateTimer(){
- if(!currentSession)return;
 
- const rem=Math.max(0,new Date(currentSession.ends_at)-new Date());
- const t=Math.floor(rem/1000);
+if(!currentSession)return;
 
- const h=String(Math.floor(t/3600)).padStart(2,"0");
- const m=String(Math.floor(t%3600/60)).padStart(2,"0");
- const s=String(t%60).padStart(2,"0");
+const rem=
+Math.max(
+0,
+new Date(currentSession.ends_at)-
+new Date()
+);
 
- $("timer").textContent=`${h}:${m}:${s}`;
- $("miningTimer2").textContent=`${h}:${m}:${s}`;
+const t=
+Math.floor(rem/1000);
 
- $("miningStatus").textContent=rem>0?"Mining active":"Ready to claim";
+const h=
+String(
+Math.floor(t/3600)
+).padStart(2,"0");
 
- if(rem<=0){
-  showClaimState()
- }
+const m=
+String(
+Math.floor(t%3600/60)
+).padStart(2,"0");
+
+const s=
+String(
+t%60
+).padStart(2,"0");
+
+$("timer").textContent=
+`${h}:${m}:${s}`;
+
+$("miningTimer2").textContent=
+`${h}:${m}:${s}`;
+
+$("miningStatus").textContent=
+rem>0
+?"Mining active"
+:"Ready to claim";
+
+if(rem<=0)
+showClaimState();
+
 }
+
 
 function startTimer(){
- clearInterval(timerInterval);
 
- $("mineButton").disabled=true;
- $("mineButton2").disabled=true;
+clearInterval(timerInterval);
 
- $("mineButton").textContent="⛏️ Mining...";
- $("mineButton2").textContent="⛏️ Mining...";
+$("mineButton").disabled=true;
+$("mineButton2").disabled=true;
 
- updateTimer();
+$("mineButton").textContent=
+"⛏️ Mining...";
 
- timerInterval=setInterval(updateTimer,1000)
+$("mineButton2").textContent=
+"⛏️ Mining...";
+
+updateTimer();
+
+timerInterval=
+setInterval(
+updateTimer,
+1000
+);
+
 }
+
 
 async function claimReward(){
- if(!currentUser)return;
 
- $("mineButton").disabled=true;
- $("mineButton2").disabled=true;
+if(!currentUser)return;
 
- msg("Claiming reward...");
+$("mineButton").disabled=true;
+$("mineButton2").disabled=true;
 
- try{
-  const d=await api("claim_mining");
+msg("Claiming reward...");
 
-  currentSession=null;
-  clearSavedMining();
+try{
 
-  currentUser.balance=d.balance;
+const d=
+await api("claim_mining");
 
-  if(d.referralBonus){
-   currentUser.referral_earnings=Number(currentUser.referral_earnings||0)+Number(d.referralBonus||0)
-  }
+currentSession=null;
 
-  updateUI();
-  resetMiningUI();
+clearSavedMining();
 
-  msg("🎉 +"+Number(d.reward).toLocaleString()+" DOGS claimed!")
+currentUser.balance=
+d.balance;
 
- }catch(e){
-  msg("Claim error: "+e.message);
-  $("mineButton").disabled=false;
-  $("mineButton2").disabled=false
- }
+updateUI();
+
+resetMiningUI();
+
+msg(
+"🎉 +"+
+Number(d.reward).toLocaleString()+
+" DOGS claimed!"
+);
+
+}catch(e){
+
+msg(
+"Claim error: "+
+e.message
+);
+
+$("mineButton").disabled=false;
+$("mineButton2").disabled=false;
+
 }
+
+}
+
+
+/* DAILY BONUS */
 
 function renderBonus(){
- if(!currentUser)return;
 
- const streak=Math.max(1,Math.min(7,Number(currentUser.daily_streak||0)+1));
- const last=currentUser.last_daily_claim?new Date(currentUser.last_daily_claim):null;
- const now=new Date();
+if(!currentUser)return;
 
- const claimed=last&&last.toISOString().slice(0,10)===now.toISOString().slice(0,10);
+const streak=
+Math.max(
+1,
+Math.min(
+7,
+Number(
+currentUser.daily_streak||0
+)+1
+)
+);
 
- $("streakLabel").textContent="Day "+streak;
+const last=
+currentUser.last_daily_claim
+?new Date(
+currentUser.last_daily_claim
+)
+:null;
 
- let html="";
+const now=new Date();
 
- for(let i=1;i<=7;i++){
-  const reward=20+(i-1)*10;
-  const cls=i<=Number(currentUser.daily_streak||0)?"claimed":i===streak&&!claimed?"active":"";
+const claimed=
+last&&
+last.toISOString().slice(0,10)===
+now.toISOString().slice(0,10);
 
-  html+=`<div class="day ${cls}"><b>Day ${i}</b><br><span class="gold">${reward}</span></div>`
- }
+$("streakLabel").textContent=
+"Day "+streak;
 
- $("bonusDays").innerHTML=html;
+let html="";
 
- $("bonusButton").disabled=!!claimed;
- $("bonusButton").textContent=claimed?"✅ Claimed Today":"🎁 Claim "+(20+(streak-1)*10)+" DOGS"
+for(let i=1;i<=7;i++){
+
+const reward=
+20+(i-1)*10;
+
+const cls=
+i<=Number(
+currentUser.daily_streak||0
+)
+?"claimed"
+:
+i===streak&&!claimed
+?"active"
+:"";
+
+html+=
+`<div class="day ${cls}">
+<b>Day ${i}</b><br>
+<span class="gold">${reward}</span>
+</div>`;
+
 }
+
+$("bonusDays").innerHTML=
+html;
+
+$("bonusButton").disabled=
+!!claimed;
+
+$("bonusButton").textContent=
+claimed
+?"✅ Claimed Today"
+:"🎁 Claim "+
+(20+(streak-1)*10)+
+" DOGS";
+
+}
+
 
 async function claimDailyBonus(){
- if(!currentUser)return;
 
- $("bonusButton").disabled=true;
- msg("Claiming daily bonus...");
+if(!currentUser)return;
 
- try{
-  const d=await api("daily_bonus");
+$("bonusButton").disabled=true;
 
-  currentUser.balance=d.balance;
-  currentUser.daily_streak=d.streak;
-  currentUser.last_daily_claim=new Date().toISOString();
+msg(
+"Claiming daily bonus..."
+);
 
-  updateUI();
+try{
 
-  msg("🎁 Day "+d.streak+" bonus claimed: +"+d.reward+" DOGS!")
+const d=
+await api("daily_bonus");
 
- }catch(e){
-  msg("Bonus error: "+e.message);
-  $("bonusButton").disabled=false
- }
+currentUser.balance=
+d.balance;
+
+currentUser.daily_streak=
+d.streak;
+
+currentUser.last_daily_claim=
+new Date().toISOString();
+
+updateUI();
+
+msg(
+"🎁 Day "+
+d.streak+
+" bonus claimed: +"+
+d.reward+
+" DOGS!"
+);
+
+}catch(e){
+
+msg(
+"Bonus error: "+
+e.message
+);
+
+$("bonusButton").disabled=false;
+
 }
+
+}
+
+
+/* TASKS */
+
+async function loadTasks(){
+
+if(!currentUser)return;
+
+$("taskList").innerHTML=
+`<div class="muted small">
+Loading tasks...
+</div>`;
+
+try{
+
+const d=
+await api("get_tasks");
+
+tasks=d.tasks||[];
+
+renderTasks();
+
+}catch(e){
+
+$("taskList").innerHTML=
+`<div class="muted small">
+Task error: ${e.message}
+</div>`;
+
+}
+
+}
+
+
+function renderTasks(){
+
+$("taskCount").textContent=
+tasks.length;
+
+if(!tasks.length){
+
+$("taskList").innerHTML=
+`<div class="muted small">
+No tasks available right now.
+</div>`;
+
+return;
+
+}
+
+let html="";
+
+tasks.forEach(t=>{
+
+const started=
+localStorage.getItem(
+"dogs_task_started_"+t.id
+)==="1";
+
+let button="";
+
+if(t.completed){
+
+button=
+`<button class="secondary" disabled>
+✅ Claimed
+</button>`;
+
+}else if(started){
+
+button=
+`<button onclick="claimTask(${t.id})">
+💰 Claim +${Number(t.reward||0).toLocaleString()} DOGS
+</button>`;
+
+}else{
+
+button=
+`<button onclick="startTask(${t.id})">
+🚀 Start Task
+</button>`;
+
+}
+
+html+=
+`<div class="task-card">
+
+<div class="row">
+<span class="task-title">
+${escapeHtml(t.title||"Task")}
+</span>
+
+<span class="gold task-reward">
++${Number(t.reward||0).toLocaleString()} DOGS
+</span>
+</div>
+
+<div class="task-description">
+${escapeHtml(t.description||"Complete this task to earn DOGS.")}
+</div>
+
+${button}
+
+</div>`;
+
+});
+
+$("taskList").innerHTML=
+html;
+
+}
+
+
+function escapeHtml(x){
+
+return String(x||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+function startTask(id){
+
+const task=
+tasks.find(x=>
+Number(x.id)===Number(id)
+);
+
+if(!task){
+
+msg("Task not found.");
+
+return;
+
+}
+
+localStorage.setItem(
+"dogs_task_started_"+id,
+"1"
+);
+
+if(task.target_url){
+
+if(tg){
+
+tg.openTelegramLink(
+task.target_url
+);
+
+}else{
+
+window.open(
+task.target_url,
+"_blank"
+);
+
+}
+
+}else{
+
+msg("Task link is not available.");
+
+}
+
+renderTasks();
+
+msg(
+"Complete the task, then return here to claim your reward."
+);
+
+}
+
+
+async function claimTask(id){
+
+const task=
+tasks.find(x=>
+Number(x.id)===Number(id)
+);
+
+if(!task){
+
+msg("Task not found.");
+
+return;
+
+}
+
+msg("Claiming task reward...");
+
+try{
+
+const d=
+await api(
+"claim_task",
+{
+taskId:Number(id)
+}
+);
+
+currentUser.balance=
+d.balance;
+
+localStorage.removeItem(
+"dogs_task_started_"+id
+);
+
+const index=
+tasks.findIndex(x=>
+Number(x.id)===Number(id)
+);
+
+if(index>=0)
+tasks[index].completed=true;
+
+updateUI();
+
+renderTasks();
+
+msg(
+"🎉 Task completed! +"+
+Number(d.reward).toLocaleString()+
+" DOGS added."
+);
+
+}catch(e){
+
+msg(
+"Task claim error: "+
+e.message
+);
+
+}
+
+}
+
+
+/* REFERRAL */
 
 function renderReferral(){
- if(!currentUser)return;
 
- const code=currentUser.referral_code;
+if(!currentUser)return;
 
- if(code){
-  $("myReferralCode").textContent=code;
-  $("myReferralLink").textContent="https://t.me/Dogsearningbot?startapp="+encodeURIComponent(code)
- }else{
-  $("myReferralCode").textContent="Not available yet";
-  $("myReferralLink").textContent="Referral link unavailable"
- }
+const code=
+currentUser.referral_code;
+
+if(code){
+
+$("myReferralCode").textContent=
+code;
+
+$("myReferralLink").textContent=
+"https://t.me/Dogsearningbot?startapp="+
+encodeURIComponent(code);
+
+}else{
+
+$("myReferralCode").textContent=
+"Not available yet";
+
+$("myReferralLink").textContent=
+"Referral link unavailable";
+
 }
+
+}
+
 
 async function copyReferralLink(){
- const link=$("myReferralLink").textContent;
 
- if(!link||link.startsWith("Referral")){
-  msg("Referral link is not available yet.");
-  return
- }
+const link=
+$("myReferralLink").textContent;
 
- try{
-  await navigator.clipboard.writeText(link);
-  msg("📋 Referral link copied!")
- }catch(e){
-  msg("Could not copy the link.")
- }
+if(
+!link||
+link.startsWith("Referral")
+){
+
+msg(
+"Referral link is not available yet."
+);
+
+return;
+
 }
+
+try{
+
+await navigator.clipboard.writeText(link);
+
+msg(
+"📋 Referral link copied!"
+);
+
+}catch(e){
+
+msg(
+"Could not copy the link."
+);
+
+}
+
+}
+
 
 function shareReferralLink(){
- const link=$("myReferralLink").textContent;
 
- if(!link||link.startsWith("Referral")){
-  msg("Referral link is not available yet.");
-  return
- }
+const link=
+$("myReferralLink").textContent;
 
- const share="https://t.me/share/url?url="+encodeURIComponent(link)+"&text="+encodeURIComponent("Join DOGS EarningBot and start mining DOGS! 🐕");
+if(
+!link||
+link.startsWith("Referral")
+){
 
- if(tg)tg.openTelegramLink(share);
- else window.open(share,"_blank")
+msg(
+"Referral link is not available yet."
+);
+
+return;
+
 }
+
+const share=
+"https://t.me/share/url?url="+
+encodeURIComponent(link)+
+"&text="+
+encodeURIComponent(
+"Join DOGS EarningBot and start mining DOGS! 🐕"
+);
+
+if(tg)
+tg.openTelegramLink(share);
+else
+window.open(share,"_blank");
+
+}
+
 
 connectUser();
 
